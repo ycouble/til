@@ -1,0 +1,80 @@
+<p>Traditionally in video broadcasting services, there is one entity broadcasting its content over different frequencies. That is a classical bandwidth sharing technique called Frequency Division Multiplexing (FDM). Each flow is sent over a specific frequency dedicated to it so that it doesn’t interfere with other users.</p>
+
+<p>In digital telephony (e.g. ISDN), a different approach is used: users transmit only during short time slots, periodically and on the same frequency. This is call Time Division Multiplexing (TDM). The timeslots are assigned statically to users, and hence unused when the user doesn’t use it.</p>
+
+<p>But when the potential user number overpasses the capacity, it is necessary to use an access method to dynamically assign resources.
+FDM and TDM have their corresponding access methods with Frequency Division Multiple Access (FDMA) and Time Division Multiple Access (TDMA) techniques. Instead of assigning statically the frequency/time resources, they just define an Frequency/Time division plan that will be use by the MAC layer as allocable resource. FDMA was used in mobile telephony and some satellite systems, TDMA is used in GSM and some optical networks.</p>
+
+<p>MF-TDMA is a combination of FDMA and TDMA: multiple frequency channels are available, and each is divided in timeslots. Users are provided dynamically one or more slots of time/frequency for their traffic.</p>
+
+<p>The DVB-RCS2 standard uses MF-TDMA. In the following we’ll try to explain how this standard organises all (frequency, time) couples that are available.</p>
+
+<p>In this article, we’ll focus on a specific case of the standard, with <em>linear modulation and burst transmission</em>.</p>
+
+<p><a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/dvbrcs2-sysview.png"><img src="./MF-TDMA Applied to DVB-RCS2 - Notebook_files/dvbrcs2-sysview.png" alt="System view of a DVB-S2/RCS2 satellite. The Forward link uses DVB-S2, the return link the DVB-RCS2" /></a>Figure 1: System view of a DVB-S2/RCS2 satellite. The Forward link uses DVB-S2, the return link the DVB-RCS2 [<a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/dvbrcs2-sysview.png">PNG</a>]
+ DVB-RCS2 Waveforms</p>
+
+<p>DVB-RCS2 defines several waveforms to be used. Some (up to 128) are predefined by the standard, and others can be defined by the system user (up to 128). Each waveform defined for a system shall be provided in advance to each RCST.
+A waveform is defined by a few parameters such as the modulation scheme, coding rate, burst length in symbols, pilot scheme etc.</p>
+
+<p>Below are a few examples of waveforms. Many waveforms use the same symbol length, so that ACM can be done easily by interchanging the waveforms.</p>
+
+<p><a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/waveforms.png"><img src="./MF-TDMA Applied to DVB-RCS2 - Notebook_files/waveforms.png" alt="Some waveform examples with 232, 536 or 1616 symbol bursts" /></a>Figure 2: Some waveform examples with 232, 536 or 1616 symbol bursts [<a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/waveforms.png">PNG</a>]
+ MF-TDMA entities</p>
+
+<p>### 
+ Bandwidth-Time Unit (BTU)</p>
+
+<p>The smallest unit in MF-TDMA is the BTU. A BTU is a slot, with defined duration, carrier bandwidth and symbol rate.</p>
+
+<p>Hence, only a limited number of waveforms can fit to a BTU type, given its <em>duration</em> and <em>symbol rate</em>.</p>
+
+<p>### 
+ Timeslot</p>
+
+<p>A timeslot is a sequence of BTU of the same type over a single carrier frequency. Hence, the duration of a timeslot is a multiple of the BTU duration, and the bandwidth is the same as the bandwidth of a BTU.</p>
+
+<p>There are different types of timeslots, depending on how many BTU they cover, or their function. As far as I know, there are 5 types of timeslots:</p>
+
+<ul>
+  <li>Type <em>G (Generic)</em>: they are 1 BTU large and can be aggregated together just in time (right before being transmitted, according to the need) to form other types of timeslots.</li>
+  <li>Type <em>CB (Control Burst)</em>: like the type G BTUs, they are one BTU large, but they are used for signalling only.</li>
+  <li>Type <em>LB (Logon Burst)</em>: this timeslot type is specific and uses 3 BTU, used for logon.</li>
+  <li>Type <em>TRF1 (Traffic 1)</em>: they are 2 BTU large and used for user traffic.</li>
+  <li>Type <em>TRF2 (Traffic 2)</em>: they are 6 BTU large and used for user traffic.</li>
+</ul>
+
+<p>### 
+ Frame</p>
+
+<p>A frame is an combination of timeslots. It is possible to combine different types of timeslots in the same frame, as long as all the timeslot types use <em>the same type of BTU</em>.</p>
+
+<p>It is possible to define several frame types, according to the need of the implementer.</p>
+
+<p>Below are 3 examples of frame templates, without the repartition of timeslots.</p>
+
+<p><a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/btu-frames.png"><img src="./MF-TDMA Applied to DVB-RCS2 - Notebook_files/btu-frames.png" alt="Three examples of different-sized BTU frames, without timeslot scheme applied" /></a>Figure 3: Three examples of different-sized BTU frames, without timeslot scheme applied [<a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/btu-frames.png">PNG</a>]</p>
+
+<p>A frame is the combination of one of the above “templates” and a timeslot scheme, as shown on the following figure extracted from the standard.</p>
+
+<p><a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/timeslots.png"><img src="./MF-TDMA Applied to DVB-RCS2 - Notebook_files/timeslots.png" alt="Example of timeslot repartition, grey grid in the background is the timeslot base for the frame" /></a>Figure 4: Example of timeslot repartition, grey grid in the background is the timeslot base for the frame [<a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/timeslots.png">PNG</a>]
+### 
+ Superframe</p>
+
+<p>A super frame is an aggregation of one or more frames. Frames do not have to be contiguous (time and frequency wise). A super frame is identified through its superframe count. A superframe total duration is generally between 25ms and 750ms (even though it can be higher in some implementations.).</p>
+
+<p>Frames inside a superframe can be of various types, as long as their common carrier frequency bandwidths are the same. An example of superframe is shown on the simple example below.</p>
+
+<p><a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/superframe.png"><img src="./MF-TDMA Applied to DVB-RCS2 - Notebook_files/superframe.png" alt="A simple superframe example, with 3 types of frames, timeslots are ommited for clarity" /></a>Figure 5: A simple superframe example, with 3 types of frames, timeslots are ommited for clarity [<a href="https://web.archive.org/web/20180904010733/http://couble.ovh/figures/superframe.png">PNG</a>]</p>
+
+<p>A group of super frames of the same type is called a <em>SuperFrame Sequence</em> (SFS).</p>
+
+<p>Conclusion</p>
+
+<p>In this article we presented the MF-TDMA access method used in the case of linear modulation with bursted transmission for the Return Link of DVB-RCS2 standard.</p>
+
+<p>We overviewed the decomposition of the bandwidth, broadcasted to every user connected to the terminal periodically, along with the dynamic allocation scheme.</p>
+
+<p>This is done to allow thousands of users to access the channel without interfering with each other, and it works !</p>
+
+<hr />

@@ -1,0 +1,105 @@
+<p>This article follows the previous <a href="https://web.archive.org/web/20180903234701/http://couble.ovh/Delay-Tolerant-Network.html">introduction to DTN</a>.</p>
+
+<p>Satellite Networks differ from classical ground wired/wireless networks in many ways. Among which:</p>
+
+<ul>
+  <li>Long to very long delays</li>
+  <li>Error bursts on the signal channel, especially on the ground to space segment</li>
+  <li>Unreliable topology: a node may become unreachable for a period of time without notice, or have a scheduled time span of availability</li>
+  <li>Each node is really expensive to deploy, hence aborting or failing a packet transmission is very costly</li>
+</ul>
+
+<p>Network utilization and its resiliency to error is a critical issue in satellite networks, and its optimization is a vast area of research.</p>
+
+<p>The delay-tolerant or disruption tolerant network aims to unifying communications in a global overlay network, defining how actors may transfer data according to their needs.
+Different services are defined, as well as their goals, in the DTN Architectures RFC and its direct protocol translation: the Bundle protocol.</p>
+
+<p>Both RFC have been written by the same authors (NASA, Google, MITRE, Intel).</p>
+
+<p>The Bundle protocol is intended as an overlay, transport independant protocol, proposing Quality of service, custody transfers with delivery options for unicast, anycast, multicast and broadcast communications.</p>
+
+<p>Below is the ascii version of the Network stack.</p>
+
+<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Stack.png" alt="The Bundle Protocol Network Stack, extracted from RFC 5050." /></a>Figure 1: The Bundle Protocol Network Stack, extracted from RFC 5050. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png">PNG</a>]</p>
+
+<p>The Bundle protocol is closely similar in idea to the postal services. Actually, it is largely inspired from it.
+For example:</p>
+
+<ul>
+  <li>the postal services give the possibility to ask for an acknowledgement, which is shipped with the mail itself.</li>
+  <li>Postal offices keep mails for a long period of time before a postman delivers it to destination.</li>
+  <li>A very remote village with only one postman delivering mail once a week can easily be compared to a satellite being in line of sight of the closest node only one day a week.</li>
+  <li>Likewise, the possibility to monitor the delivery status of one’s package is often offered by mail services, with each post office reporting the reception/forwarding of the package.</li>
+</ul>
+
+<p>The Bundle Protocol works exactly like that, and offers the same type of services to the applications using it.</p>
+
+<p>The Bundle protocol defines two entities: the node and the endpoint:</p>
+
+<ul>
+  <li>The node is the router running a bundle protocol instance</li>
+  <li>Nodes can register to enpoints. An endpoint is the final destination node of a bundle.
+ A node can participate in one or more endpoints but has to be part of an endpoint where he is the only one, called a singleton.
+ A node is identified by an endpoint ID. The singleton endpoint ID of a node is then a unique identifier for this node.</li>
+</ul>
+
+<p>Endpoint ID are similar to a postal address or a web URL. An URI scheme is defined for the DTN architectures (more generically than just for the Bundle Protocol).</p>
+
+<h3 id="the-bundle-protocol-data-unit">The Bundle Protocol Data Unit</h3>
+
+<p>The classical Bundle Protocol Data Unit (BPDU) is shown below.
+This is only an example, as only a template is defined. The BPDU has customizable fields (the same way HTTP has).</p>
+
+<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Data_Unit.png" alt="Example of a Bundle Protocol Data Unit, extracted from RFC 5050." /></a>Figure 2: Example of a Bundle Protocol Data Unit, extracted from RFC 5050. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png">PNG</a>]</p>
+<h3 id="delivery-options">Delivery options</h3>
+
+<p>There are seveval types of acknoledgement that can be requested by the application agent to the bundle layer.
+Each of them are independant and non exclusive.</p>
+
+<ul>
+  <li>Recieved bundle ack</li>
+  <li>Forwarded bundle ack</li>
+  <li>Application layer ack</li>
+  <li>Custody accepted ack</li>
+  <li>A few other more</li>
+</ul>
+
+<p>They are used as indicators for the sender, for example to release a node which was storing temporarly a bundle in ‘custody’ (see below for more details on custody transfers).
+On a more practical point of view, acknoledgement are used by application agents to locate and emphasize the progress of the data transfer.</p>
+
+<h3 id="quality-of-service">Quality of service</h3>
+
+<p>The Bundle protocol offers two parameters of quality of service:</p>
+
+<ul>
+  <li>an importance degree (or drop me last priority)</li>
+  <li>a delay degree (or forward me first)</li>
+</ul>
+
+<p>Both have 3 levels, which gives 9 levels for Quality of service.</p>
+
+<p>Altgough expiration time is not expressively a QoS criteria, it has its impact on forwarding queues in intermediary bundle nodes.</p>
+
+<h3 id="reliability-and-custody-transfers">Reliability and Custody transfers</h3>
+
+<p>This is in my opinion the main new feature of the DTN.</p>
+
+<p>Custody transfers are store-and-forward transfers pushed at their maximum. 
+The bundle passes from one custodian endpoint to the other, and each custodian endpoint stores the bundle until it has confirmation that the bundle was accepted in custody by another custodian endpoint.</p>
+
+<p>This is somewhat similar to a prisonier transfer, hence the name.</p>
+
+<p>The bundle/prisonier is escorted from one custodian endpoint/prison to the other by an agent who will expressively report the success of the transfer.
+Except the bundle stays in the first prison while also being transferred to the second! Handy, isn’t it?</p>
+
+<p>Bundle nodes are free to chose to accept or refuse a bundle’s custody request. 
+If they chose to refuse custody, they still can simply forward it, and send acknoledgements according to the bundle’s delivery options.</p>
+
+<p>This is illustrated on the figure below. <a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/custody_transfer_6steps.png">A step-by-step figure is available here</a></p>
+
+<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/DTN_custody.png" alt="Example of a custody transfer." /></a>Figure 3: Example of a custody transfer. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png">PNG</a>]</p>
+<h3 id="application-to-common-l7-protocols-and-conclusions">Application to common L7 protocols, and conclusions</h3>
+
+<p>This will be the focus for a future article related to DTN.</p>
+
+<hr />

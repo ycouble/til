@@ -1,0 +1,143 @@
+<p>This article focuses on label switching principles in MPLS protocol, this is the second part of my wiki for the IP/MPLS technology.
+See <a href="https://web.archive.org/web/20180904021807/http://couble.ovh/MPLS-basics.html">my introduction the MPLS</a> for a wider view on MPLS.</p>
+
+<p>In this article, we will go deeper into what constitues a MPLS network, and how data is switched over the network.</p>
+
+<p>MPLS is a core network protocol and doesn’t define how access is to be handled. 
+Hence, a provider using MPLS will be interconnected to one or more access operators, who are then its customers.</p>
+
+<p>With that in mind, the router interconnecting the core network provider and the access operator is the Customer Edge Router (CER or more generally only CE). 
+On the other hand, routers participating to the MPLS, but only connected to other MPLS routers are called Provider Edge Routers (PER or PE).</p>
+
+<p>The MPLS standards [RFC 3031] define new denominations that we will prefer here. 
+A MPLS router is called a Label Switch Router (LSR), and when it is on the edge of the MPLS network, it will be called E-LSR (Edge-LSR) or sometimes LER (Label Edge Router).</p>
+
+<p>The CE/PE terminology is inherited from an older protocol with similar node roles, ATM.
+Operator were used to these names and MPLS devices generally implemented ATM as well, so the old names stayed rather than being replaced by the newly defined ones.</p>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_roles.png"><img src="./MPLS - Label Switching - Notebook_files/mpls_roles.png" alt="A MPLS network, with 3 customers." /></a>Figure 1: A MPLS network, with 3 customers. [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_roles.png">PNG</a>]</p>
+
+<p>The E-LSR or LER is the node in charge of encaplusating/decapsulating packets into/out of the MPLS network, and the LSR does the switching according to the MPLS header.
+Classically, a LSR offers more functionalities than a LER. Sometimes, a LER can also fulfill the LSR role.</p>
+
+<p>Figure 1 shows a MPLS Network, interconnected with 3 customers. Customer 1 has 2 geographically distant sites. 
+The LER/LSR 1 here is the entry point, and hence is a LER, for customer 1 but can also be used as a LSR to switch MPLS frames from LER 2 to LER 3.</p>
+
+<p>MPLS is a packet switching protocol, like Ethernet: ingress packets on port X with label a will always be switched to port Y according to the forwarding table.</p>
+
+<p>Except in Ethernet the destination MAC address -which is a unique identifier for an endpoint- is kept from one hop to the other, while MPLS will modify the label at each LSR. This is called label <em>swapping</em>.
+The meaning of a label is only link-local and doesn’t identify anything but a type of packets that are passing from one LSR to the other. 
+In fact MPLS doesn’t have any endpoint identifier, which retrospectively seems quite obvious for a core network.</p>
+
+<p>Hence, packets are not forwarded based on who it is destined to but rather according to how the MPLS network classified it at network ingress.</p>
+
+<p>This is a fairly important distinction and allows MPLS to perform its own Quality of Service independantly from its customers.</p>
+
+<p>Another significant difference between MPLS and Ethernet is that ethernet doesn’t use a control plane, which enables an easier automatic decentralized configuration. 
+MPLS on the other hand relies on its control protocols to determine what are the label switched paths (LSP), classification, QoS etc.</p>
+
+<p>QoS, classification and the control plane are wide topics and will be describe thouroughly later, in articles dedicated to them.</p>
+
+<p>Here, let’s just focus on how a packet is really forwarded from a MPLS entry point towards its destination network, assuming that all forwarding tables are already computed in the whole network.</p>
+
+<p>Below is a simple example for a 4 node MPLS network and 2 customer networks.</p>
+
+<p>Let’s also assume the switching tables described in Table 1.</p>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path1.png"><img src="./MPLS - Label Switching - Notebook_files/mpls_path1.png" alt="Example with 2 LER and 2 LSR" /></a>Figure 2: Example with 2 LER and 2 LSR [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path1.png">PNG</a>]</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Node</th>
+      <th>ingress port</th>
+      <th>ingress label</th>
+      <th>egress port</th>
+      <th>egress label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LSR2</td>
+      <td>1</td>
+      <td>L0</td>
+      <td>2</td>
+      <td>L4</td>
+    </tr>
+    <tr>
+      <td>LSR2</td>
+      <td>1</td>
+      <td>L1</td>
+      <td>3</td>
+      <td>L5</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>LSR3</td>
+      <td>2</td>
+      <td>L4</td>
+      <td>3</td>
+      <td>L7</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Table 1: MPLS forwarding tables for nodes LSR2 &amp; LSR3</p>
+
+<p>Let’s say a packet p is routed towards the destination network:</p>
+
+<ol>
+  <li>At LER1 ingress, packet p is for example <em>pushed</em> the label L1 and is forwarded towards LSR2.</li>
+  <li>At LSR2 ingress, p is switched to port 3 and label <em>swapped</em> to L5 according to the forwarding table.</li>
+  <li>At LER4 p exits the MPLS network and its label is <em>popped</em>.</li>
+</ol>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path2.png"><img src="./MPLS - Label Switching - Notebook_files/mpls_path2.png" alt="Path for a packet assigned with label L1 at network ingress." /></a>Figure 3: Path for a packet assigned with label L1 at network ingress. [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path2.png">PNG</a>]</p>
+
+<p>Now assume that another packet p’ with different characteristics but towards the same destination network:</p>
+
+<ol>
+  <li>At LER1 ingress, unlike p, packet p’ is <em>pushed</em> the label L0 and is forwarded to LSR2.</li>
+  <li>At LSR2 ingress, p’ is switched to port 2 and label <em>swapped</em> to L4 according to the forwarding table.</li>
+  <li>At LSR3 ingress, p’ is switched to port 3 with label L7</li>
+  <li>Ats LER4, p’ is label popped, exits and is delivered to the destination network</li>
+</ol>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path3.png"><img src="./MPLS - Label Switching - Notebook_files/mpls_path3.png" alt="Path for a packet assigned with a different label at network ingress." /></a>Figure 4: Path for a packet assigned with a different label at network ingress. [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_path3.png">PNG</a>]</p>
+
+<p>In this example, we can see that the label a packet is assign will determine how it will be switched all along its path trough the MPLS network.
+In this case, p’ gets a longer path. 
+While it may seem under-optimized traffic handling, it may also be used for two things, which happen to be 2 of the most important feature of MPLS:</p>
+
+<ul>
+  <li>Given a label, one may not access all the MPLS network egress nodes. Also, a customer can be given a label dedicated to him and all his traffic handled the same way, towards its authorized destination. 
+ MPLS VPNs are based on that observation.</li>
+  <li>If LSR2-LER4 is usually congestioned, p’ may have a more advantageous path regarding delay or other metrics.
+ Organizing the MPLS network paths according to different constraints is called traffic engineering and is widely used over the internet along with QoS. These two aspects will be further detailed in their respective articles.</li>
+</ul>
+
+<p>To continue with the ethernet comparison, it is noticeable that every ethernet frame with the same destination are always switched using the same path, provided that the network topology doesn’t change.</p>
+
+<p>MPLS carries a very small amount of information mainly composed of the label, a TTL and the EXP field, used for QoS. 
+Below is the frame format for one label. A MPLS header, called “label stack”, is composed of 1 or more labels.</p>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_frame.jpg"><img src="./MPLS - Label Switching - Notebook_files/mpls_frame.jpg" alt="MPLS label format." /></a>Figure 5: MPLS label format. [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_frame.jpg">JPG</a>]</p>
+
+<p>Stacking labels can be used to provide additional services.
+For example the Virtual Private Networks based on MPLS use an additional label to identify the ‘service’ packets belong to additionally to the first layer of labels that are used for switching packets. This, again, will be further explained in a dedicated artcile.</p>
+
+<p>In the case of MPLS over Ethernet, the Ethernet frame at the MPLS ingress node is transported inside the MPLS packet, over another Ethernet frame. (IP over Ethernet over MPLS over Ethernet).</p>
+
+<p>Below are the packet detail of an example MPLS packet. The packet is available <a href="https://web.archive.org/web/20180904021807/http://couble.ovh/assets/mpls1label.pcapng">here</a>. 
+Another example can be found <a href="https://web.archive.org/web/20180904021807/http://couble.ovh/assets/mpls2labels.pcapng">here</a> (with two labels).</p>
+
+<p><a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_wireshark.jpg"><img src="./MPLS - Label Switching - Notebook_files/mpls_wireshark.jpg" alt="Example of MPLS over Ethernet encapsulation (protocol view)." /></a>Figure 6: Example of MPLS over Ethernet encapsulation (protocol view). [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_wireshark.jpg">JPG</a>]
+<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_encap_eth.jpg"><img src="./MPLS - Label Switching - Notebook_files/mpls_encap_eth.jpg" alt="Example of MPLS over Ethernet encapsulation (bit view)." /></a>Figure 7: Example of MPLS over Ethernet encapsulation (bit view). [<a href="https://web.archive.org/web/20180904021807/http://couble.ovh/figures/mpls_encap_eth.jpg">JPG</a>]</p>
+
+<hr />

@@ -1,0 +1,207 @@
+<p>With the now very common Triple Play, Voice over IP and Video Streaming applications are widely deployed and used. And as many events reminded us, securing applications is a critical matter nowadays.</p>
+
+<p>However, deploying firewalling solutions when VoIP or Streaming applications are present on the network can be very risky as it is very hard for the network administrator to have feedback on the user experience.
+In this article, we’ll try to sum up a few important points on how to support VoIP and Streaming applications passing through a firewall.</p>
+
+<h3 id="context--available-solutions">Context &amp; available Solutions</h3>
+
+<p>VoIP services often use the Session Initiation Protocol (SIP, specified in RFC 3261 &amp; RFC 3265), the other protocols (MGCP, H323 and others) are still used but are progressively less used by end-users.</p>
+
+<p>Streaming and videoconference services on the other may use SIP, RTSP, or even HTTP to set up their media sessions. We will focus here on SIP, but the remarks here are also applicable to other protocols.</p>
+
+<h4 id="dynamic-protocols">Dynamic protocols</h4>
+
+<p>VoIP and Streaming are seen as dynamic protocol because the media payload is often sent on a different channel than the session information. 
+This is inherited from Legacy telephony with separated control and data planes.</p>
+
+<p>It generally looks like this:</p>
+
+<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/dynamic_protocol.png"><img src="./Dynamic Firewalling - Notebook_files/dynamic_protocol.png" alt="Media session setup" /></a>Figure 1: Media session setup [<a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/dynamic_protocol.png">PNG</a>]</p>
+<h4 id="sip">SIP</h4>
+
+<p>SIP is a dynamic protocol, where one or more sessions are negotiated by two user-agents before starting to send the user data (here, voice of video).</p>
+
+<p>A classical SIP conversation between two direct agents will look like this:</p>
+
+<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/SIP_session.png"><img src="./Dynamic Firewalling - Notebook_files/SIP_session.png" alt="Simple SIP conversation" /></a>Figure 2: Simple SIP conversation [<a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/SIP_session.png">PNG</a>]</p>
+
+<p>SIP generally relies on the Session Description Protocol -which is more a language to describe a media session than a protocol- to negotiate the parameters of the session.</p>
+
+<p>SDP is carried in some SIP packets (e.g. INVITEs, 200 OKs, ACKs), and provides information such as UDP ports which will be used to send/receive the media content.</p>
+
+<h4 id="allowing-sip-and-its-content-through-a-firewall">Allowing SIP and its content through a firewall</h4>
+
+<p>On a firewall, allowing VoIP will first require the admin to authorize the SIP protocol, which classically uses UDP port 5060 both ways.</p>
+
+<p>But then, how do we, as the admin, allow the voice/video flows?</p>
+
+<ul>
+  <li>A simple solution is to authorize a window of UDP ports that we know will be assigned to the media flows.</li>
+</ul>
+
+<p>These ports are generally assigned within configurable limits and asking the person in charge of the VoIP solution may be sufficient to make it work.
+ But this solution does not satisfy high security requirements as thousands of ports are potentially open and uncontrolled.</p>
+<ul>
+  <li>A more complex solution is to implement statefulness in the firewall, and by inspecting the SIP/SDP payload, to identify “on the fly” which ports need to be open and to open them only for the duration of the call.</li>
+</ul>
+
+<h3 id="consequences-of-dynamic-firewalling">Consequences of dynamic firewalling</h3>
+
+<h4 id="hardware">Hardware</h4>
+
+<p>This type of operation requires to have Deep Inspection capacities, and enough resource to save and maintain a state table of each session. 
+In other words, a big CPU and enough RAM, as well as a full implementation of every dynamic protocol.</p>
+
+<p>And therefore higher end firewalls, obviously.</p>
+
+<h4 id="impact-on-other-functions">Impact on other functions</h4>
+
+<p>On next generation firewalls, other functions such as IPS (Intrusion Protection System), Application control, DoS prevention may be activated on dynamic protocol flows, and must be adapted to support the media flow.</p>
+
+<p>For example, the application control, which is in charge to check the authenticity of the application headers of a packet, will need to be aware that a new type of payload needs to be authorized.</p>
+
+<h4 id="dos-protection">DoS Protection</h4>
+
+<p>With dynamic firewalling, it is possible to dynamically identify which flows are legitimate media flows and which ones may be malicious ones. 
+Thus, it enables the admin to apply different policies to identified media sessions and other generic unknown packets.</p>
+
+<p>Also, by isolating media session flows in a dedicated DoS policy, one may ensure that none of these packets are impacted by a global DoS attack (udp flood for example)</p>
+
+<h4 id="stateful-firewall-clusters">Stateful firewall clusters</h4>
+
+<p>When the firewall is redundant/load-balanced, what happens when the master firewall fails?</p>
+
+<p>With the simple solution, both firewalls have the same simple configuration and media streams are not interrupted.
+But when dynamic management of sessions is implemented and configured, it is a bit more complicated.</p>
+
+<p>All sessions must be synchronized between the firewall who initiated the session and the other firewalls, so that when it fails, the firewall which will inherit of the session knows which ports must be open for the media streams.
+This is a pretty important feature to be developped when dynamic session management is used, or the service user experience may be seriously degraded in case of a failure (all calls/media streams interrupted at once).</p>
+
+<h3 id="example-on-fortios">Example on FortiOS</h3>
+
+<p>Let’s have a look at how it is implemented in FortiOS, the firewall OS for Fortinet products (Fortigate series).</p>
+
+<h4 id="service-configuration">Service configuration</h4>
+
+<h5 id="service-customization">Service customization</h5>
+
+<p>SIP is already configured by default on FortiOS, so you don’t need to modify it. However, if you need to use specific ports for your SIP application, it is possible to change it manually.
+<code class="language-plaintext highlighter-rouge">config vdom
+ edit test
+ config firewall service custom
+ edit "SIP-custom"
+ set protocol TCP/UDP/SCTP
+ set udp-portrange **&lt;SIP\_custom\_port&gt;**
+ set comment "custom SIP service"
+ next
+ end
+ next
+end</code>
+NB: if VDOM are not used, use <code class="language-plaintext highlighter-rouge">config global</code> instead.</p>
+
+<h5 id="session-helpers">Session-helpers</h5>
+
+<p>Each manufacturer has its own name for this feature, Fortinet uses the words <em>session helpers</em>.
+Session helpers are implemented directly by the manufacturer and may not be configurable, or limited in configurability.
+For fortiOS, it is only possible to change the service port (the one the session protocol is using).</p>
+
+<p>To display all session-helpers:
+<code class="language-plaintext highlighter-rouge">config global
+ show system session-helper</code>
+And then look for the block with sip as name:
+ <code class="language-plaintext highlighter-rouge">edit 13
+ set name sip
+ set port 5060
+ set protocol 17
+ next</code>
+<strong>NB: if you need to customize or duplicate a session-helper entry, it is important not to change the name, which is how FortiOS associates the session-helper with the actual code.</strong></p>
+
+<h5 id="policy">Policy</h5>
+
+<p>The association between a service and its session-helpers is done automatically.</p>
+
+<p>The last step for the basic configuration is to create the policy:
+<code class="language-plaintext highlighter-rouge">config vdom
+ edit test
+ config firewall policy
+ edit 1
+ set srcintf **&lt;portX&gt;**
+ set dstintf **&lt;portY&gt;**
+ set srcaddr **&lt;addr\_source&gt;**
+ set dstaddr **&lt;addr\_destination&gt;**
+ set service SIP *//or the name of the created custom service*
+ set action accept
+ next
+ end
+ next
+end</code></p>
+
+<h4 id="application-control">Application Control</h4>
+
+<p>If a strict Application profile is applied to your policy (which is only possible on high end devices), it may be necessary to add the RTP/RTCP or any media transport protocol used to you application control list.</p>
+
+<h4 id="ips">IPS</h4>
+
+<p>Similarly, you may want to monitor IPS threats regarding the media protocols and associate the IPS/Application Control profiles to the policy.</p>
+
+<h4 id="dos-policies">Dos Policies</h4>
+
+<p>DoS policies are better used when they are more specific: if a type of packet crosses its associated thresholds, packets will start to be dropped by the firewall.</p>
+
+<p>With session-helpers, the media flows are identified as belonging to the same service as the SIP, and are treated as such by the DoS protection mecanisms.
+Therefore it is necessary to dimension the DoS policy in a consistent way, including both SIP and RTP traffic, which may represent high udp packet rates.</p>
+
+<p>(with G711.A codex, 1 unidirectional media stream generates about 45 pps, versus maximum 2 or 3 pps when SIP is alone)</p>
+
+<h4 id="high-availability-parameters">High availability parameters</h4>
+
+<p>In FortiOS, high availability and session synchronization settings for media traffic are setup as follow:
+<code class="language-plaintext highlighter-rouge">config global
+ config system ha
+ set session-pickup enable
+ set session-pickup-connectionless enable
+ end
+end</code></p>
+
+<p>Sources:</p>
+
+<ol>
+  <li><a href="https://web.archive.org/web/20180904000145/https://www.ietf.org/rfc/rfc3261.txt">RFC 3261: SIP: Session Initiation Protocol</a></li>
+  <li><a href="https://web.archive.org/web/20180904000145/http://docs.fortinet.com/">FortiOS technical documentation</a></li>
+</ol>
+
+<ul>
+  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-0">Context &amp; available Solutions</a>
+    <ul>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-0">Dynamic protocols</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-1">SIP</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-2">Allowing SIP and its content through a firewall</a></li>
+    </ul>
+  </li>
+  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-1">Consequences of dynamic firewalling</a>
+    <ul>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-3">Hardware</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-4">Impact on other functions</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-5">DoS Protection</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-6">Stateful firewall clusters</a></li>
+    </ul>
+  </li>
+  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-2">Example on FortiOS</a>
+    <ul>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-7">Service configuration</a>
+        <ul>
+          <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-0">Service customization</a></li>
+          <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-1">Session-helpers</a></li>
+        </ul>
+      </li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-2">Application Control</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-3">IPS</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-9">Dos Policies</a></li>
+      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-10">High availability parameters</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#references">Sources</a></p>
+
+<hr />
