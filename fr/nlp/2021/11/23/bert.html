@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>La Famille BERT et les Transformers | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="La Famille BERT et les Transformers" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?" />
+<meta property="og:description" content="Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?" />
+<link rel="canonical" href="https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-11-23T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="La Famille BERT et les Transformers" />
+<script type="application/ld+json">
+{"description":"Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html"},"url":"https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html","@type":"BlogPosting","headline":"La Famille BERT et les Transformers","dateModified":"2021-11-23T00:00:00-06:00","datePublished":"2021-11-23T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/til/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/til/about/">About Me</a><a class="page-link" href="/til/search/">Search</a><a class="page-link" href="/til/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">La Famille BERT et les Transformers</h1><p class="page-description">Qu'est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-11-23T00:00:00-06:00" itemprop="datePublished">
+        Nov 23, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/til/categories/#fr">fr</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#nlp">nlp</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2021-11-23-bert.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/til/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2021-11-23-bert.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/til/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2021-11-23-bert.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/til/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#Ressources">Ressources </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Références">Références </a></li>
+<li class="toc-entry toc-h3"><a href="#Exemples">Exemples </a></li>
+<li class="toc-entry toc-h3"><a href="#Cours-et-ressources-formatrices">Cours et ressources formatrices </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#Why-Transformers-/-BERT-?">Why Transformers / BERT ? </a></li>
+<li class="toc-entry toc-h1"><a href="#What-are-they-?">What are they ? </a></li>
+<li class="toc-entry toc-h1"><a href="#How-to-use-Transformers">How to use Transformers </a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#🤗-Transformers">🤗 Transformers </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Solution-1:-use-a-pre-defined-/-pre-trained-model">Solution 1: use a pre-defined / pre-trained model </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Get-model-and-associated-tokenizer-from-model-hub">Get model and associated tokenizer from model hub </a></li>
+<li class="toc-entry toc-h4"><a href="#Define-pipeline">Define pipeline </a></li>
+<li class="toc-entry toc-h4"><a href="#Use-on-example">Use on example </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Solution-2:-use-the-raw-BERT-model-and-customize-its-heads">Solution 2: use the raw BERT model and customize its heads </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Example-from-BertForTokenClassification">Example from BertForTokenClassification </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Within-Spacy">Within Spacy </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-11-23-bert.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pip</span> install --upgrade -q pandas torch transformers "spacy&gt;=3.2.0" spacy-transformers
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+<span class="ansi-yellow-fg">WARNING: You are using pip version 21.1.1; however, version 21.3.1 is available.
+You should consider upgrading via the '/Users/yco/.pyenv/versions/proto-38dev/bin/python -m pip install --upgrade pip' command.</span>
+Note: you may need to restart the kernel to use updated packages.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Ressources">
+<a class="anchor" href="#Ressources" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ressources<a class="anchor-link" href="#Ressources"> </a>
+</h1>
+<h3 id="Références">
+<a class="anchor" href="#R%C3%A9f%C3%A9rences" aria-hidden="true"><span class="octicon octicon-link"></span></a>Références<a class="anchor-link" href="#R%C3%A9f%C3%A9rences"> </a>
+</h3>
+<ul>
+<li>Attention is all you need (2016, Transformer paper): <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a>
+</li>
+<li>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding (2018): <a href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a>
+</li>
+</ul>
+<ul>
+<li>Illustrated transformer: <a href="http://jalammar.github.io/illustrated-transformer/">http://jalammar.github.io/illustrated-transformer/</a>
+</li>
+<li>BERT model doc on hugging face: <a href="https://huggingface.co/transformers/model_doc/bert.html#bertmodel">https://huggingface.co/transformers/model_doc/bert.html#bertmodel</a>
+</li>
+<li><a href="https://spacy.io/usage/embeddings-transformers">https://spacy.io/usage/embeddings-transformers</a></li>
+</ul>
+<h3 id="Exemples">
+<a class="anchor" href="#Exemples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exemples<a class="anchor-link" href="#Exemples"> </a>
+</h3>
+<ul>
+<li>Exemple de configuration sur le hub de huggingface: <a href="https://huggingface.co/dslim/bert-base-NER/blob/main/config.json">https://huggingface.co/dslim/bert-base-NER/blob/main/config.json</a>
+</li>
+<li>Transformers pour le NER FR <a href="https://huggingface.co/models?language=fr&amp;pipeline_tag=token-classification&amp;sort=downloads&amp;search=ner">https://huggingface.co/models?language=fr&amp;pipeline_tag=token-classification&amp;sort=downloads&amp;search=ner</a>
+</li>
+<li>Facebook Language AI Research NER: <a href="https://huggingface.co/flair/ner-french">https://huggingface.co/flair/ner-french</a> (Org, Per, Loc, Names)</li>
+<li><a href="https://towardsdatascience.com/easy-fine-tuning-of-transformers-for-named-entity-recognition-d72f2b5340e3">https://towardsdatascience.com/easy-fine-tuning-of-transformers-for-named-entity-recognition-d72f2b5340e3</a></li>
+<li><a href="https://skimai.com/how-to-fine-tune-bert-for-named-entity-recognition-ner/">https://skimai.com/how-to-fine-tune-bert-for-named-entity-recognition-ner/</a></li>
+<li>Use huggingface transformers within spacy: <a href="https://reposhub.com/python/deep-learning/explosion-spacy-transformers.html">https://reposhub.com/python/deep-learning/explosion-spacy-transformers.html</a>
+</li>
+</ul>
+<h3 id="Cours-et-ressources-formatrices">
+<a class="anchor" href="#Cours-et-ressources-formatrices" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cours et ressources formatrices<a class="anchor-link" href="#Cours-et-ressources-formatrices"> </a>
+</h3>
+<ul>
+<li><a href="https://www.coursera.org/learn/attention-models-in-nlp/home/welcome">https://www.coursera.org/learn/attention-models-in-nlp/home/welcome</a></li>
+<li><a href="https://huggingface.co/course/chapter1">https://huggingface.co/course/chapter1</a></li>
+<li><a href="https://course.spacy.io/en/chapter4">https://course.spacy.io/en/chapter4</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PL75e0qA87dlG-za8eLI6t0_Pbxafk-cxb">https://www.youtube.com/playlist?list=PL75e0qA87dlG-za8eLI6t0_Pbxafk-cxb</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Why-Transformers-/-BERT-?">
+<a class="anchor" href="#Why-Transformers-/-BERT-?" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Transformers / BERT ?<a class="anchor-link" href="#Why-Transformers-/-BERT-?"> </a>
+</h1>
+<ul>
+<li>Les Transformers s'appuient sur le mécanisme d'attention, qui a prouvé son efficacité</li>
+<li>Les Transformers sont une architecture de deep learning générique, applicable à toutes les tâches de NLP</li>
+<li>Les tâches de NLP (classification, NER, traduction, QA, ...) se ressemblent beaucoup, et une grande partie de l'effort est commun: comprendre la structure d'un langage, les relations entre les mots etc.<ul>
+<li>Il y a un intérêt important à avoir un moyen de mutualiser cette approche pour transférer la connaissance</li>
+<li>Le word / sentence embeddings sont un premier pas dans ce sens, mais pas sur les relations entre les mots ni sur le sens des phrases</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="What-are-they-?">
+<a class="anchor" href="#What-are-they-?" aria-hidden="true"><span class="octicon octicon-link"></span></a>What are they ?<a class="anchor-link" href="#What-are-they-?"> </a>
+</h1>
+<ul>
+<li>Un transformer est une architecture de deep learning qui utilise le mécanisme d'attention: l'importance de chaque mot de la phrase par rapport à chaque autre mot est prise en compte</li>
+</ul>
+<p><img src="/til/images/copied_from_nb/bert/attention.png" alt="attention" title="Mécanisme d'attention">
+<img src="/til/images/copied_from_nb/bert/scaleddotprod.png" alt="scaled dot prod"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>L'architecture Transformer est composée d'un encoder et d'un decoder, tous deux basés sur le mécanisme d'attention. Dans le décodeur l'attention est dite causale (ou masquée), c'est à dire qu'on ne regarde que les mots passés.</li>
+</ul>
+<p><img src="/til/images/copied_from_nb/bert/transformer_archi.png" alt="transformer">
+<img src="/til/images/copied_from_nb/bert/multihead.png" alt="multi head attn"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>BERT est initialement une approche de pre-training pour capturer les relations dans un langage, l'entraînement se fait sur une tâche auto-supervisée (self-supervised) ce qui permet de l'entraîner sur de grande quantité de données. Le fine tuning se fait ensuite en utilisant le transfer learning</li>
+</ul>
+<p><img src="/til/images/copied_from_nb/bert/bert_training.png" alt="bert"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="How-to-use-Transformers">
+<a class="anchor" href="#How-to-use-Transformers" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use Transformers<a class="anchor-link" href="#How-to-use-Transformers"> </a>
+</h1>
+<p>BERT et les autres transformers sont conçus pour être réutilisable en grande partie pour différentes tâche, il ne reste donc qu'à réadapter les entrées et sorties à la tâche visée</p>
+<h2 id="🤗-Transformers">
+<a class="anchor" href="#%F0%9F%A4%97-Transformers" aria-hidden="true"><span class="octicon octicon-link"></span></a>🤗 Transformers<a class="anchor-link" href="#%F0%9F%A4%97-Transformers"> </a>
+</h2>
+<p>Hugging Face a construit toute une API pour faciliter l'utilisation des transformers. La librairie propose des pipelines pré-définies et une bibliothèque de modèles et de datasets prêtes à l'emplois.</p>
+<p>La configuration d'un modèle se fait très facilement (sans code) à l'aide d'un fichier de configuration: <a href="https://huggingface.co/dslim/bert-base-NER/blob/main/config.json">https://huggingface.co/dslim/bert-base-NER/blob/main/config.json</a></p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">"_num_labels"</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+  <span class="nt">"architectures"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"BertForTokenClassification"</span>
+  <span class="p">],</span>
+  <span class="nt">"attention_probs_dropout_prob"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+  <span class="nt">"hidden_act"</span><span class="p">:</span> <span class="s2">"gelu"</span><span class="p">,</span>
+  <span class="nt">"hidden_dropout_prob"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+  <span class="nt">"hidden_size"</span><span class="p">:</span> <span class="mi">768</span><span class="p">,</span>
+  <span class="nt">"initializer_range"</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span>
+  <span class="nt">"intermediate_size"</span><span class="p">:</span> <span class="mi">3072</span><span class="p">,</span>
+  <span class="nt">"layer_norm_eps"</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span>
+  <span class="nt">"max_position_embeddings"</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+  <span class="nt">"model_type"</span><span class="p">:</span> <span class="s2">"bert"</span><span class="p">,</span>
+  <span class="nt">"num_attention_heads"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+  <span class="nt">"num_hidden_layers"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+  <span class="nt">"output_past"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nt">"pad_token_id"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nt">"type_vocab_size"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">"vocab_size"</span><span class="p">:</span> <span class="mi">28996</span><span class="p">,</span>
+  <span class="err">#</span> <span class="err">Labels</span>
+  <span class="nt">"id2label"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"0"</span><span class="p">:</span> <span class="s2">"O"</span><span class="p">,</span>
+    <span class="nt">"1"</span><span class="p">:</span> <span class="s2">"B-MISC"</span><span class="p">,</span>
+    <span class="nt">"2"</span><span class="p">:</span> <span class="s2">"I-MISC"</span><span class="p">,</span>
+    <span class="nt">"3"</span><span class="p">:</span> <span class="s2">"B-PER"</span><span class="p">,</span>
+    <span class="nt">"4"</span><span class="p">:</span> <span class="s2">"I-PER"</span><span class="p">,</span>
+    <span class="nt">"5"</span><span class="p">:</span> <span class="s2">"B-ORG"</span><span class="p">,</span>
+    <span class="nt">"6"</span><span class="p">:</span> <span class="s2">"I-ORG"</span><span class="p">,</span>
+    <span class="nt">"7"</span><span class="p">:</span> <span class="s2">"B-LOC"</span><span class="p">,</span>
+    <span class="nt">"8"</span><span class="p">:</span> <span class="s2">"I-LOC"</span>
+  <span class="p">},</span>
+  <span class="nt">"label2id"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"B-LOC"</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="nt">"B-MISC"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"B-ORG"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nt">"B-PER"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nt">"I-LOC"</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="nt">"I-MISC"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nt">"I-ORG"</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="nt">"I-PER"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nt">"O"</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>Ici l'architecture choisie est <code>BertForTokenClassification</code> ce qui correspond à une tâche de NER (affecter à chaque token un label). Et on retrouve aussi les différents hyper-paramètres des transformers (nombre de têtes d'attention, paramètres d'attention, ...). Pour pouvoir réutiliser les poids d'entraînement d'un modèle pré-entraîné, il ne faut faire attention à ne changer que ce qui ne casse pas la compatibilité avec le modèle pré-entraîné.</p>
+<p>Note: Les labels sont définis avec le mode d'anotation "IOB" (I: Inside entity, O: Outside entity, B: Beginning of entity) ex: Je suis Yoann Couble serait annoté "O O B-PER I-PER".</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Solution-1:-use-a-pre-defined-/-pre-trained-model">
+<a class="anchor" href="#Solution-1:-use-a-pre-defined-/-pre-trained-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution 1: use a pre-defined / pre-trained model<a class="anchor-link" href="#Solution-1:-use-a-pre-defined-/-pre-trained-model"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForTokenClassification</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">"dslim/bert-base-NER"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Get-model-and-associated-tokenizer-from-model-hub">
+<a class="anchor" href="#Get-model-and-associated-tokenizer-from-model-hub" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get model and associated tokenizer from model hub<a class="anchor-link" href="#Get-model-and-associated-tokenizer-from-model-hub"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForTokenClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Define-pipeline">
+<a class="anchor" href="#Define-pipeline" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define pipeline<a class="anchor-link" href="#Define-pipeline"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">"ner"</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Use-on-example">
+<a class="anchor" href="#Use-on-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use on example<a class="anchor-link" href="#Use-on-example"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">example</span> <span class="o">=</span> <span class="s2">"My name is Wolfgang and I live in Berlin"</span>
+
+<span class="n">ner_results</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ner_results</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[{'word': 'Wolfgang', 'score': 0.9990139603614807, 'entity': 'B-PER', 'index': 4, 'start': 11, 'end': 19}, {'word': 'Berlin', 'score': 0.9996449947357178, 'entity': 'B-LOC', 'index': 9, 'start': 34, 'end': 40}]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Solution-2:-use-the-raw-BERT-model-and-customize-its-heads">
+<a class="anchor" href="#Solution-2:-use-the-raw-BERT-model-and-customize-its-heads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution 2: use the raw BERT model and customize its heads<a class="anchor-link" href="#Solution-2:-use-the-raw-BERT-model-and-customize-its-heads"> </a>
+</h3>
+<p>Start from a <a href="https://huggingface.co/transformers/model_doc/bert.html#bertmodel">raw BERT model without any head</a>, but where the weights can be re-used.
+Create a child class and define the <code>__init__</code> and <code>forward</code> methods, see <a href="https://huggingface.co/transformers/_modules/transformers/models/bert/modeling_bert.html#BertForTokenClassification">example from BertForTokenClassification</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Example-from-BertForTokenClassification">
+<a class="anchor" href="#Example-from-BertForTokenClassification" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example from BertForTokenClassification<a class="anchor-link" href="#Example-from-BertForTokenClassification"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BertForTokenClassification</span><span class="p">(</span><span class="n">BertPreTrainedModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">num_labels</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bert</span> <span class="o">=</span> <span class="n">BertModel</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">add_pooling_layer</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">classifier_dropout</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">classifier_dropout</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">classifier_dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">config</span><span class="o">.</span><span class="n">hidden_dropout_prob</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">classifier_dropout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">num_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_weights</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">attention_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">token_type_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">position_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">head_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">inputs_embeds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_attentions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_hidden_states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">return_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="o">...</span>
+        <span class="c1"># See doc linked above</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Within-Spacy">
+<a class="anchor" href="#Within-Spacy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Within Spacy<a class="anchor-link" href="#Within-Spacy"> </a>
+</h2>
+<p>Spacy est complètement intégré dans huggingface, il est donc possible de les réutiliser à l'intérieur des pipelines spacy.</p>
+<p>Spacy fourni également des modèles pré-entraînés et bien intégrés à Spacy. Ce sont les modèles finissant en <code>_trf</code> comme <a href="https://spacy.io/models/fr#fr_dep_news_trf">celui-ci basé sur camembert-base</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Download the model within your virtual environment / kernel (in my case, it's a pyenv environment)</p>
+<div class="highlight"><pre><span></span>pyenv activate <span class="m">3</span>.8.6
+python -m spacy download en_core_web_trf
+</pre></div>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy</span> <span class="kn">import</span> <span class="n">displacy</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_trf"</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"My name is Wolfgang and I live in Berlin"</span><span class="p">)</span>
+
+<span class="n">displacy</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s2">"ent"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<span class="tex2jax_ignore"><div class="entities" style="line-height: 2.5; direction: ltr">My name is 
+<mark class="entity" style="background: #aa9cfc; padding: 0.45em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.35em;">
+    Wolfgang
+    <span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; vertical-align: middle; margin-left: 0.5rem">PERSON</span>
+</mark>
+ and I live in 
+<mark class="entity" style="background: #feca74; padding: 0.45em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.35em;">
+    Berlin
+    <span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; vertical-align: middle; margin-left: 0.5rem">GPE</span>
+</mark>
+</div></span>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/til/fr/nlp/2021/11/23/bert.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/til/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/til/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/til/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

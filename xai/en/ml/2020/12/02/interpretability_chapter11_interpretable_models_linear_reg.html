@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Interpretability (Part 2) | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Interpretability (Part 2)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes on Interpretable Machine Learning by C. Molnar" />
+<meta property="og:description" content="Notes on Interpretable Machine Learning by C. Molnar" />
+<link rel="canonical" href="https://ycouble.github.io/til/xai/en/ml/2020/12/02/interpretability_chapter11_interpretable_models_linear_reg.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/xai/en/ml/2020/12/02/interpretability_chapter11_interpretable_models_linear_reg.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-02T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Interpretability (Part 2)" />
+<script type="application/ld+json">
+{"description":"Notes on Interpretable Machine Learning by C. Molnar","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/xai/en/ml/2020/12/02/interpretability_chapter11_interpretable_models_linear_reg.html"},"url":"https://ycouble.github.io/til/xai/en/ml/2020/12/02/interpretability_chapter11_interpretable_models_linear_reg.html","@type":"BlogPosting","headline":"Interpretability (Part 2)","dateModified":"2020-12-02T00:00:00-06:00","datePublished":"2020-12-02T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/til/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/til/about/">About Me</a><a class="page-link" href="/til/search/">Search</a><a class="page-link" href="/til/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Interpretability (Part 2)</h1><p class="page-description">Notes on Interpretable Machine Learning by C. Molnar</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-12-02T00:00:00-06:00" itemprop="datePublished">
+        Dec 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/til/categories/#xai">xai</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#en">en</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#ml">ml</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="interpretable-models---linear-regression">Interpretable Models - Linear Regression</h2>
+<p>Linear regressions are simple models, which force the output to be a linear combination of the inputs. This means that the model is additive and thus easily explainable. The weights <strong>are</strong> the explaination.</p>
+
+<p>Assumptions used to compute the confidence intervals:</p>
+<ul>
+  <li><strong>Linearity</strong>: forced by linear regression</li>
+  <li><strong>Normality</strong>: the probability of the target outcome given the feature should follow a normal distribution.</li>
+  <li><strong>Homoscedasticity</strong>: (constant variance) The variance of the error terms is assumed to be constant, which is generally not verified (variance typically often increase for large values)</li>
+  <li><strong>Independence</strong>: assumption that each instance in independent of any other, often not verified when you have several repeated measurements. If this is not the cas you need to have specific linear regression models such as mixed effect models of GEE (<strong>//TODO</strong>).</li>
+  <li><strong>Fixed features</strong>: inputs are considered exact and without measurement errors (always wrong, but it would be highly impractical otherwise)</li>
+  <li><strong>Absence of multicollinearity</strong>: When two features are strongly correlated, it blurrs the importance of the two (weights could go either way, and the model would be as efficient with only one of them)</li>
+</ul>
+
+<h2 id="interpretation">Interpretation</h2>
+<p>Interpretation depends on the type of feature:</p>
+<ul>
+  <li>numerical: increase in feature –&gt; increase * weight on outcome</li>
+  <li>binary/categorical: presence/absence/selection –&gt; weight on outcome</li>
+  <li>intercept: if features are normalized and bin/cat 0 = reference –&gt; outcome of all feature at their mean</li>
+</ul>
+
+<h3 id="r-squared">R-squared</h3>
+<p>Another important measurement is the R-squared, which tells how much of the total variance of the target outcome is explained by the model.</p>
+<ul>
+  <li>Higher R-squarred is better.</li>
+  <li>R² = 1 - square sum of errors / square sum of data variance.</li>
+  <li>R² increases with the number of features, so it is better to use the adjusted R² = 1 - (1 - R²) (n-1)/(n-p-1) where p is the number of features and n the number of instances</li>
+  <li>low adjusted R² –&gt; not interpretable because it does not explain much of the variance.</li>
+</ul>
+
+<h3 id="feature-importance">Feature importance</h3>
+<p>Importance of a feature in LR can be measured by the absolute value of its T-statistic, which is the estimated weight scaled with its standard error. (standard error = standard deviation of the outcome in a outcome = intercept + feature_weight * feature_value function)</p>
+
+<p>–&gt; possible to plot for each feature (like a facet plot) the <code class="language-plaintext highlighter-rouge">y = i + w*x</code> curve, with standard error shown, which highlights the distribution of the ground truths around the predictions.</p>
+
+<h2 id="visual-interpretation">Visual interpretation</h2>
+<h3 id="weight-plots-httpschristophmgithubiointerpretable-ml-booklimohtmlweight-plot">Weight plots (https://christophm.github.io/interpretable-ml-book/limo.html#weight-plot)</h3>
+<p>Weight plots show for each feature the weight estimate and the standard error.</p>
+<ul>
+  <li>Low SE represents a reliable feature</li>
+  <li>High weight estimate means a high influence in the outcome</li>
+  <li>Scaling makes the estimate weights more comparable</li>
+</ul>
+
+<h3 id="effect-plots">Effect plots</h3>
+<p>Box plots for each feature. Only effects are represented. Effect = weight * value.</p>
+<ul>
+  <li>vertical line = effect of the median</li>
+  <li>box = 25% and 75% quantiles effect</li>
+  <li>horizontal line = span +- 1.5 InnerQuartileRange</li>
+  <li>dots = outliers</li>
+</ul>
+
+<h2 id="explain-individual-predictions">Explain individual predictions</h2>
+<ul>
+  <li>Position the individual feature effects on an <strong>Effect plot</strong>: it enables to see how and why the outcome was decided (in particular, outlier effects are interesting)</li>
+</ul>
+
+<h2 id="encoding-categorical-features">Encoding Categorical Features</h2>
+<p>Two encoding presented:</p>
+<ul>
+  <li>Treatment coding: N - 1 features for N categories, 1 hot encoding</li>
+  <li>Effect coding: Compare each category to the mean and use this value for encoding (only N-1 categories encoded)</li>
+</ul>
+
+<h2 id="do-linear-models-create-good-explanations-">Do Linear models create good explanations ?</h2>
+<p>“linear models do not create the best explanations”</p>
+<ul>
+  <li><strong>Contrastive</strong>, but the reference instance is a data point where all numerical are 0 and categorical are at their reference category (usually meaningless).
+If all features are mean centered, and cat features are effect coded, then the reference instance is the point where all features are at the mean.</li>
+  <li><strong>Selectivity</strong> can be achieved by LR using less features or training sparse linear models, but by default, explainations are not selective.</li>
+  <li><strong>Truthfulness</strong>: <strong>yes</strong> as long as the Linear Model is appropriate (aR² high).</li>
+  <li>Linearity makes the explanation mode <strong>general</strong> and <strong>simple</strong></li>
+</ul>
+
+<h2 id="sparse-linear-models">Sparse Linear Models</h2>
+<p>Regularization makes the model more frugal.</p>
+<ul>
+  <li>By adding a lambda * norm of the weights, in the minimization term, it penalizes models that have a lot of non null weights. The higher the lambda, the less feature are going into the model.</li>
+  <li>Usually, lambda is tuned during cross-validation</li>
+  <li></li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/til/xai/en/ml/2020/12/02/interpretability_chapter11_interpretable_models_linear_reg.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/til/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/til/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/til/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

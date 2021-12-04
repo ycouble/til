@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Interpretability (Part 1) | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Interpretability (Part 1)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes on Interpretable Machine Learning by C. Molnar" />
+<meta property="og:description" content="Notes on Interpretable Machine Learning by C. Molnar" />
+<link rel="canonical" href="https://ycouble.github.io/til/xai/en/ml/2020/11/20/interpretability_chapter0.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/xai/en/ml/2020/11/20/interpretability_chapter0.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-20T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Interpretability (Part 1)" />
+<script type="application/ld+json">
+{"description":"Notes on Interpretable Machine Learning by C. Molnar","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/xai/en/ml/2020/11/20/interpretability_chapter0.html"},"url":"https://ycouble.github.io/til/xai/en/ml/2020/11/20/interpretability_chapter0.html","@type":"BlogPosting","headline":"Interpretability (Part 1)","dateModified":"2020-11-20T00:00:00-06:00","datePublished":"2020-11-20T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/til/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/til/about/">About Me</a><a class="page-link" href="/til/search/">Search</a><a class="page-link" href="/til/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Interpretability (Part 1)</h1><p class="page-description">Notes on Interpretable Machine Learning by C. Molnar</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-20T00:00:00-06:00" itemprop="datePublished">
+        Nov 20, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/til/categories/#xai">xai</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#en">en</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#ml">ml</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="interpretable-machine-learning">Interpretable Machine Learning</h1>
+<p>Some notes on the small book <a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning</a> by Christoph Molnar.</p>
+
+<h2 id="introduction-and-overview">Introduction and overview</h2>
+<p>Christoph Molnar overviews in his book the concept of model interpretability, and surveys several ways to help ML engineers design more interpretable machine learning model, i.e. enable humans to understand the reasons why the ML model outputs what it outputs instead of any the other possible answers.
+The motivation for model interpretability is qui immediate, as a matter of fact it is often observed that results from a recommender system such as YouTube video recommendations are somewhat obsucre, and the more importance machine learning algorithms take into our lives, the more important it will be that we are able to understand the “whys” of the ML models decisions.</p>
+
+<p>Efforts are being made by many of the major actors, as for example Amazon’s recommendation systems providing a set of articles that are commonly bought together, or the “customers that bought what you just bought also often purchased this other article” and such. 
+However, it is far from being widespread, and it also has an important impact for many many companies or labs that usually focus on ML model performance and trust almost blindly the output of their model. 
+Note that this is not only applicable to ML, it is also often the case for sufficiently complicated models and algorithms such are optimization (among which discrete optimization is probably a great candidate), where we are unable to track or get an intuition of why the result is such and not something completely different.</p>
+
+<p>The consequences of bad model interpretability are numerous, but I see one very important point, which is functional model debugging failures.
+If you trust you model/algorithm blindly, it then becomes very hard to see if the model behaves as it should. 
+For example, imagine that you have a discrete optimization problem, which is NP-hard and that you solve using a custom algorithm. 
+Since the problem is too complex, it is nearly impossible (or too long) to know the optimal solution for a large instance, and you are left with trusting your algorithm or only confronting your algorithm to the known optimal on very small instances that may not be representative of larger instances, and certainly not a proof. 
+In this kind of situations, it becomes very important to have some other ways of checking the result of your algorithm, its consistency, why the result on such instance is much lower than on other similar instances, etc.</p>
+
+<p>The same applies to machine learning, with an even more critical factor which is that ML models are much more obscure on their internal mechanisms.
+Indeed, unlike instruction-based algorithms which are easily probed and for which each step bears meaning, machine learning models internal steps bear no meaning and are only the result of the model training on data.</p>
+
+<h2 id="model-interpretability">Model interpretability</h2>
+<p>What the author defines as interpretability is the capacity of a model/solution to justify its output. 
+First he mentions that there are models that are intrinsincly interpretables sur as linear regressions, decisions trees and such where the internal parameter values already offers a sufficiently good explanation of the output.
+For example, for a linear regression, the weights of each feature will tell us how important are each feature compared to the others.</p>
+
+<p>But for more sophisticated model, interpretability is obtained through more indirect or approximation methods, among which:</p>
+
+<ul>
+  <li>Partial dependance plots (WIP)</li>
+  <li>Individual Conditional Expectations (WIP)</li>
+  <li>Accumulated Local Effects (WIP)</li>
+  <li>Feature Interaction (WIP)</li>
+  <li>Feature Importance (WIP)</li>
+  <li>Global Surrogate, which consist of approximating the output of the model by a simple, intepretable machine learning model.</li>
+  <li>Local Surrogate, which is the same as global but only for the neighborhood of an instance.</li>
+  <li>Shapley Values, inspired from game-theory where the relative importance of each feature in the “coalition” is derived from similar instances in the dataset.</li>
+</ul>
+
+<h2 id="interpretability-evaluation">Interpretability evaluation</h2>
+<p>Interpretability is not easily evaluated since there is no quantification of interpretability and since it depends largely on the social and technological context of the recipient of explanations.
+Obviously the explaination of the model output will not be the same for an field expert and for the end customer of a recommender system.</p>
+
+<p>Several criteria of evaluation are underline in the book, first as general criteria for an explanation method, then for individual explanation produced by such methods:</p>
+
+<ul>
+  <li>Explanation power: how expressive the provided explanations are (do they use natural language, if-then-else type conditions…)</li>
+  <li>Translucency: how related to the model internal is the explanation (for example an explanation consisting in the weights for a linear model is a very translucent explanation)</li>
+  <li>Portability: how tied to a model is the explanation, i.e. can it be ported to other models without modifications (in the last example, the weight is not a portable explanation)</li>
+  <li>Algorithmic complexity</li>
+</ul>
+
+<p>Individual explanations:</p>
+
+<ul>
+  <li>Accuracy: how fit to the data is the explanation</li>
+  <li>Fidelity: how fit to the model output is the explanation</li>
+  <li>Consistency: how robust to a model change is the explanation (closely related to the method portability)</li>
+  <li>Stability (Always desirable): how robust to some small perturbations is the explanation</li>
+  <li>Comprehensibility</li>
+  <li>Certainty: how sure / confident in the explanation</li>
+  <li>Degree of Importance: feature importance for explaining the data</li>
+  <li>Novelty of the data: how exceptional is an instance compared to the known dataset</li>
+  <li>Representativeness: range covered by the explanation</li>
+</ul>
+
+<h2 id="human-friendly-explanations">Human friendly explanations</h2>
+<p>For a model to be easily intepretable by humans the author argues that the explanations should follow several rules:</p>
+
+<ul>
+  <li>Explanations have to be selected: a good practice is to refrain from providing every possible bit of explainatory data and to limit the explanation to the 1-3 most important pieces of explanations.</li>
+  <li>Explanations should be constrastive: usually humans prefer explanations that compare the instance with similar one that have a different ouput: “why is this instance so special that it doesn’t output the same result as intuitively similar instances ?”.</li>
+  <li>Explanations should be targeted according to the target of the explanation</li>
+  <li>Explanations should focus on abnormal data whenever possible: the most important piece of explanation is not always the most numerically significant but maybe the one which bears the highest abnormality.</li>
+  <li>Explanations should be as truthful as possible, i.e. it should remain applicable on other instances and not be invalidated</li>
+  <li>If no abnormality can be found, a general and probable explanation is also preferable to many pieces of unexceptional explanations.</li>
+</ul>
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/til/xai/en/ml/2020/11/20/interpretability_chapter0.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/til/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/til/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/til/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/til/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
