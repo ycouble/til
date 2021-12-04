@@ -2,7 +2,7 @@
 title: IP Multicasting
 description: Broadcasting content over IP Networks
 date: March 31, 2015
-categories: [notes,networking  ]
+categories: [networking]
 ---
 
 

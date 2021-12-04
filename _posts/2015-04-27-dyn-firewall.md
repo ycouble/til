@@ -2,7 +2,7 @@
 title: Dynamic Firewalling
 description: Securing Multimedia Dynamic Protocols
 date: April 27, 2015
-categories: [security  ]
+categories: [security]
 ---
 
 

@@ -2,7 +2,7 @@
 title: MPLS - Label Switching
 description: How MPLS lives with other protocols
 date: March 3, 2015
-categories: [networking  ]
+categories: [networking]
 ---
 
 

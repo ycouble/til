@@ -2,7 +2,7 @@
 title: DTN & Bundle Protocol
 description: Services
 date: February 24, 2015
-categories: [satellite,networking,notes  ]
+categories: [satellite, networking]
 ---
 
 

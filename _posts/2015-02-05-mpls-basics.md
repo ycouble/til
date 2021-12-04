@@ -2,7 +2,7 @@
 title: MPLS Basics
 description: Traffic Engineering and route protection
 date: February 5, 2015
-categories: [networking  ]
+categories: [networking]
 ---
 
 

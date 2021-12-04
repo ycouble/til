@@ -2,7 +2,7 @@
 title: The Oberth effect
 description: Or why speed matters
 date: February 5, 2015
-categories: [astronautics  ]
+categories: [space]
 ---
 
 

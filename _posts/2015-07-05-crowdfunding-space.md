@@ -2,7 +2,7 @@
 title: Crowdfunding Space Exploration
 description: Do you want to take part in Space exploration?
 date: July 5, 2015
-categories: [notes,satellite,spaceexploration  ]
+categories: [satellite]
 ---
 
 
