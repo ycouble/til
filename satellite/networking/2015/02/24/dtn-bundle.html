@@ -1,4 +1,4 @@
-<p>This article follows the previous <a href="https://web.archive.org/web/20180903234701/http://couble.ovh/Delay-Tolerant-Network.html">introduction to DTN</a>.</p>
+<p>This article follows the previous <a href="http://couble.ovh/Delay-Tolerant-Network.html">introduction to DTN</a>.</p>
 
 <p>Satellite Networks differ from classical ground wired/wireless networks in many ways. Among which:</p>
 
@@ -20,7 +20,7 @@ Different services are defined, as well as their goals, in the DTN Architectures
 
 <p>Below is the ascii version of the Network stack.</p>
 
-<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Stack.png" alt="The Bundle Protocol Network Stack, extracted from RFC 5050." /></a>Figure 1: The Bundle Protocol Network Stack, extracted from RFC 5050. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png">PNG</a>]</p>
+<p><a href="http://couble.ovh/figures/Bundle_Protocol_Stack.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Stack.png" alt="The Bundle Protocol Network Stack, extracted from RFC 5050." /></a>Figure 1: The Bundle Protocol Network Stack, extracted from RFC 5050. [<a href="http://couble.ovh/figures/Bundle_Protocol_Stack.png">PNG</a>]</p>
 
 <p>The Bundle protocol is closely similar in idea to the postal services. Actually, it is largely inspired from it.
 For example:</p>
@@ -50,7 +50,7 @@ For example:</p>
 <p>The classical Bundle Protocol Data Unit (BPDU) is shown below.
 This is only an example, as only a template is defined. The BPDU has customizable fields (the same way HTTP has).</p>
 
-<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Data_Unit.png" alt="Example of a Bundle Protocol Data Unit, extracted from RFC 5050." /></a>Figure 2: Example of a Bundle Protocol Data Unit, extracted from RFC 5050. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png">PNG</a>]</p>
+<p><a href="http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/Bundle_Protocol_Data_Unit.png" alt="Example of a Bundle Protocol Data Unit, extracted from RFC 5050." /></a>Figure 2: Example of a Bundle Protocol Data Unit, extracted from RFC 5050. [<a href="http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png">PNG</a>]</p>
 <h3 id="delivery-options">Delivery options</h3>
 
 <p>There are seveval types of acknoledgement that can be requested by the application agent to the bundle layer.
@@ -95,11 +95,19 @@ Except the bundle stays in the first prison while also being transferred to the 
 <p>Bundle nodes are free to chose to accept or refuse a bundle’s custody request. 
 If they chose to refuse custody, they still can simply forward it, and send acknoledgements according to the bundle’s delivery options.</p>
 
-<p>This is illustrated on the figure below. <a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/custody_transfer_6steps.png">A step-by-step figure is available here</a></p>
+<p>This is illustrated on the figure below. <a href="http://couble.ovh/figures/custody_transfer_6steps.png">A step-by-step figure is available here</a></p>
 
-<p><a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/DTN_custody.png" alt="Example of a custody transfer." /></a>Figure 3: Example of a custody transfer. [<a href="https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png">PNG</a>]</p>
+<p><a href="http://couble.ovh/figures/DTN_custody.png"><img src="./DTN &amp; Bundle Protocol - Notebook_files/DTN_custody.png" alt="Example of a custody transfer." /></a>Figure 3: Example of a custody transfer. [<a href="http://couble.ovh/figures/DTN_custody.png">PNG</a>]</p>
 <h3 id="application-to-common-l7-protocols-and-conclusions">Application to common L7 protocols, and conclusions</h3>
 
 <p>This will be the focus for a future article related to DTN.</p>
 
 <hr />
+
+<p>Sources:</p>
+
+<ol>
+  <li><a href="https://tools.ietf.org/html/rfc4838">RFC 4838: Delay Tolerant Networking Architectures</a></li>
+  <li><a href="https://tools.ietf.org/html/rfc5050">RFC 5050: Bundle Protocol Specification</a></li>
+  <li><a href="https://tools.ietf.org/html/rfc6255">RFC 6255: Delay Tolerant Networking Bundle Protocol IANA Registries</a></li>
+</ol>

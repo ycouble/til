@@ -16,14 +16,14 @@ This is inherited from Legacy telephony with separated control and data planes.<
 
 <p>It generally looks like this:</p>
 
-<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/dynamic_protocol.png"><img src="./Dynamic Firewalling - Notebook_files/dynamic_protocol.png" alt="Media session setup" /></a>Figure 1: Media session setup [<a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/dynamic_protocol.png">PNG</a>]</p>
+<p><a href="http://couble.ovh/figures/dynamic_protocol.png"><img src="./Dynamic Firewalling - Notebook_files/dynamic_protocol.png" alt="Media session setup" /></a>Figure 1: Media session setup [<a href="http://couble.ovh/figures/dynamic_protocol.png">PNG</a>]</p>
 <h4 id="sip">SIP</h4>
 
 <p>SIP is a dynamic protocol, where one or more sessions are negotiated by two user-agents before starting to send the user data (here, voice of video).</p>
 
 <p>A classical SIP conversation between two direct agents will look like this:</p>
 
-<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/SIP_session.png"><img src="./Dynamic Firewalling - Notebook_files/SIP_session.png" alt="Simple SIP conversation" /></a>Figure 2: Simple SIP conversation [<a href="https://web.archive.org/web/20180904000145/http://couble.ovh/figures/SIP_session.png">PNG</a>]</p>
+<p><a href="http://couble.ovh/figures/SIP_session.png"><img src="./Dynamic Firewalling - Notebook_files/SIP_session.png" alt="Simple SIP conversation" /></a>Figure 2: Simple SIP conversation [<a href="http://couble.ovh/figures/SIP_session.png">PNG</a>]</p>
 
 <p>SIP generally relies on the Session Description Protocol -which is more a language to describe a media session than a protocol- to negotiate the parameters of the session.</p>
 
@@ -166,42 +166,7 @@ end</code></p>
 <p>Sources:</p>
 
 <ol>
-  <li><a href="https://web.archive.org/web/20180904000145/https://www.ietf.org/rfc/rfc3261.txt">RFC 3261: SIP: Session Initiation Protocol</a></li>
-  <li><a href="https://web.archive.org/web/20180904000145/http://docs.fortinet.com/">FortiOS technical documentation</a></li>
+  <li><a href="https://www.ietf.org/rfc/rfc3261.txt">RFC 3261: SIP: Session Initiation Protocol</a></li>
+  <li><a href="http://docs.fortinet.com/">FortiOS technical documentation</a></li>
 </ol>
 
-<ul>
-  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-0">Context &amp; available Solutions</a>
-    <ul>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-0">Dynamic protocols</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-1">SIP</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-2">Allowing SIP and its content through a firewall</a></li>
-    </ul>
-  </li>
-  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-1">Consequences of dynamic firewalling</a>
-    <ul>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-3">Hardware</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-4">Impact on other functions</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-5">DoS Protection</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-6">Stateful firewall clusters</a></li>
-    </ul>
-  </li>
-  <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-3-2">Example on FortiOS</a>
-    <ul>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-7">Service configuration</a>
-        <ul>
-          <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-0">Service customization</a></li>
-          <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-1">Session-helpers</a></li>
-        </ul>
-      </li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-2">Application Control</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-5-3">IPS</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-9">Dos Policies</a></li>
-      <li><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#toc-4-10">High availability parameters</a></li>
-    </ul>
-  </li>
-</ul>
-
-<p><a href="https://web.archive.org/web/20180904000145/http://couble.ovh/Dynamic-Firewalling.html#references">Sources</a></p>
-
-<hr />
