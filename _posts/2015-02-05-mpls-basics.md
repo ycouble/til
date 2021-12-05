@@ -3,6 +3,7 @@ title: MPLS Basics
 description: Traffic Engineering and route protection
 date: February 5, 2015
 categories: [networking]
+image: images/blog/MPLS.png
 ---
 
 
@@ -43,5 +44,3 @@ Also, it is possible to only hide the internet for a customer and to interconnec
 Most of MPLS signalisation protocols have been extended to a traffic engineering version with new algorithms for path calculation allowing to optimize pathes accross the MPLS network following several criteria.
 
 As the signalling protocol has the vision of the whole network, it is able to organize paths and protection schemes. For example, it is possible to protect a specific path from a signle (or double, or p simultaneous) failure(s). Retrospectively, this is the kind of algorithms i was working on during my internship at GERAD.
-
----

@@ -3,6 +3,7 @@ title: The Oberth effect
 description: Or why speed matters
 date: February 5, 2015
 categories: [space]
+image: images/blog/Orbit.jpg
 ---
 
 
@@ -24,6 +25,10 @@ So at constant \(\Delta v\), the kynetic energy gain is proportional to the spee
 
 And as we know from Kepler's laws, the apoapsis of an orbit trajectory is the point where the distance and the speed are the greatest. So that's the point with the most \(\Delta v\) efficiency.
 
-In the end the Oberth effect is an astronautics basic, allowing fuel-wise cheaper orbit transfers and trajectory modifications in interplanetary travels. It's the fundamentals on which bi-elliptic transfers and gravitational assists techniques are based. [Hermann Oberth](https://web.archive.org/web/20180904005141/http://en.wikipedia.org/wiki/Hermann_Oberth) was a German scientist who worked on Nazi rocketry projects (among which the V2 rocket weapon), he also worked for rocketry projects all over the world, as for example for NASA with his former student Wherher Von Braun. He is considered as one of the fathers of rocketry and astronautics.
+In the end the Oberth effect is an astronautics basic, allowing fuel-wise cheaper orbit transfers and trajectory modifications in interplanetary travels. It's the fundamentals on which bi-elliptic transfers and gravitational assists techniques are based. [Hermann Oberth](http://en.wikipedia.org/wiki/Hermann_Oberth) was a German scientist who worked on Nazi rocketry projects (among which the V2 rocket weapon), he also worked for rocketry projects all over the world, as for example for NASA with his former student Wherher Von Braun. He is considered as one of the fathers of rocketry and astronautics.
 
 ---
+
+Sources:
+
+1. [Wikipedia](http://en.wikipedia.org/wiki/Oberth_effect)

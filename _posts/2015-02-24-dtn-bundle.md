@@ -3,12 +3,13 @@ title: DTN & Bundle Protocol
 description: Services
 date: February 24, 2015
 categories: [satellite, networking]
+image: images/blog/mail.jpg
 ---
 
 
 
 
-This article follows the previous [introduction to DTN](https://web.archive.org/web/20180903234701/http://couble.ovh/Delay-Tolerant-Network.html).
+This article follows the previous [introduction to DTN](http://couble.ovh/Delay-Tolerant-Network.html).
 
 Satellite Networks differ from classical ground wired/wireless networks in many ways. Among which:
 
@@ -31,7 +32,7 @@ The Bundle protocol is intended as an overlay, transport independant protocol, p
   
 Below is the ascii version of the Network stack.
 
-[![The Bundle Protocol Network Stack, extracted from RFC 5050.](./DTN & Bundle Protocol - Notebook_files/Bundle_Protocol_Stack.png)](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png)Figure 1: The Bundle Protocol Network Stack, extracted from RFC 5050. [[PNG](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Stack.png)]
+[![The Bundle Protocol Network Stack, extracted from RFC 5050.](./DTN & Bundle Protocol - Notebook_files/Bundle_Protocol_Stack.png)](http://couble.ovh/figures/Bundle_Protocol_Stack.png)Figure 1: The Bundle Protocol Network Stack, extracted from RFC 5050. [[PNG](http://couble.ovh/figures/Bundle_Protocol_Stack.png)]
 
 The Bundle protocol is closely similar in idea to the postal services. Actually, it is largely inspired from it.
 For example:
@@ -59,7 +60,7 @@ Endpoint ID are similar to a postal address or a web URL. An URI scheme is defin
 The classical Bundle Protocol Data Unit (BPDU) is shown below.
 This is only an example, as only a template is defined. The BPDU has customizable fields (the same way HTTP has).
 
-[![Example of a Bundle Protocol Data Unit, extracted from RFC 5050.](./DTN & Bundle Protocol - Notebook_files/Bundle_Protocol_Data_Unit.png)](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png)Figure 2: Example of a Bundle Protocol Data Unit, extracted from RFC 5050. [[PNG](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png)]
+[![Example of a Bundle Protocol Data Unit, extracted from RFC 5050.](./DTN & Bundle Protocol - Notebook_files/Bundle_Protocol_Data_Unit.png)](http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png)Figure 2: Example of a Bundle Protocol Data Unit, extracted from RFC 5050. [[PNG](http://couble.ovh/figures/Bundle_Protocol_Data_Unit.png)]
 ### Delivery options
 
 There are seveval types of acknoledgement that can be requested by the application agent to the bundle layer.
@@ -105,11 +106,17 @@ Bundle nodes are free to chose to accept or refuse a bundle's custody request.
 If they chose to refuse custody, they still can simply forward it, and send acknoledgements according to the bundle's delivery options. 
   
 
-This is illustrated on the figure below. [A step-by-step figure is available here](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/custody_transfer_6steps.png)
+This is illustrated on the figure below. [A step-by-step figure is available here](http://couble.ovh/figures/custody_transfer_6steps.png)
 
-[![Example of a custody transfer.](./DTN & Bundle Protocol - Notebook_files/DTN_custody.png)](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png)Figure 3: Example of a custody transfer. [[PNG](https://web.archive.org/web/20180903234701/http://couble.ovh/figures/DTN_custody.png)]
+[![Example of a custody transfer.](./DTN & Bundle Protocol - Notebook_files/DTN_custody.png)](http://couble.ovh/figures/DTN_custody.png)Figure 3: Example of a custody transfer. [[PNG](http://couble.ovh/figures/DTN_custody.png)]
 ### Application to common L7 protocols, and conclusions
 
 This will be the focus for a future article related to DTN.
 
 ---
+
+Sources:
+
+1. [RFC 4838: Delay Tolerant Networking Architectures](https://tools.ietf.org/html/rfc4838)
+2. [RFC 5050: Bundle Protocol Specification](https://tools.ietf.org/html/rfc5050)
+3. [RFC 6255: Delay Tolerant Networking Bundle Protocol IANA Registries](https://tools.ietf.org/html/rfc6255)
