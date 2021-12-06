@@ -4,6 +4,11 @@ description: Do you want to take part in Space exploration?
 date: July 5, 2015
 categories: [satellite]
 image: images/blog/crowdfunding.jpg
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 

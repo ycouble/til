@@ -4,6 +4,11 @@ description: Services
 date: February 24, 2015
 categories: [satellite, networking]
 image: images/blog/mail.jpg
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 

@@ -4,6 +4,11 @@ description: Securing Multimedia Dynamic Protocols
 date: April 27, 2015
 categories: [security]
 image: images/blog/protect.jpg
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 

@@ -4,6 +4,11 @@ description: Broadcasting content over IP Networks
 date: March 31, 2015
 categories: [networking]
 image: images/blog/multicast.jpg
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 

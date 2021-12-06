@@ -4,6 +4,11 @@ description: How MPLS lives with other protocols
 date: March 3, 2015
 categories: [networking]
 image: images/blog/label.jpg
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 

@@ -4,6 +4,11 @@ description: Traffic Engineering and route protection
 date: February 5, 2015
 categories: [networking]
 image: images/blog/MPLS.png
+layout: post
+toc: false
+comments: true
+hide: false
+search_exclude: false
 ---
 
 
