@@ -4,21 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Hadoop | yco-til</title>
+<title>Training and integrating a custom text classifier to a spacy pipeline | yco-til</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Hadoop" />
+<meta property="og:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Notes from a course on Haddop ecosystem" />
-<meta property="og:description" content="Notes from a course on Haddop ecosystem" />
-<link rel="canonical" href="https://ycouble.github.io/til/en/bigdata/2020/11/02/hadoop-course-notes.html" />
-<meta property="og:url" content="https://ycouble.github.io/til/en/bigdata/2020/11/02/hadoop-course-notes.html" />
+<meta name="description" content="Customize Spacy pipelines with your custom components" />
+<meta property="og:description" content="Customize Spacy pipelines with your custom components" />
+<link rel="canonical" href="https://ycouble.github.io/til/en/python/nlp/spacy/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/en/python/nlp/spacy/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
 <meta property="og:site_name" content="yco-til" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-11-02T00:00:00-06:00" />
+<meta property="article:published_time" content="2022-02-01T00:00:00-06:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Hadoop" />
+<meta property="twitter:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
 <script type="application/ld+json">
-{"url":"https://ycouble.github.io/til/en/bigdata/2020/11/02/hadoop-course-notes.html","@type":"BlogPosting","headline":"Hadoop","dateModified":"2020-11-02T00:00:00-06:00","datePublished":"2020-11-02T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/bigdata/2020/11/02/hadoop-course-notes.html"},"description":"Notes from a course on Haddop ecosystem","@context":"https://schema.org"}</script>
+{"url":"https://ycouble.github.io/til/en/python/nlp/spacy/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html","@type":"BlogPosting","headline":"Training and integrating a custom text classifier to a spacy pipeline","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"},"description":"Customize Spacy pipelines with your custom components","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="yco-til" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,13 +73,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Hadoop</h1><p class="page-description">Notes from a course on Haddop ecosystem</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-02T00:00:00-06:00" itemprop="datePublished">
-        Nov 2, 2020
+    <h1 class="post-title p-name" itemprop="name headline">Training and integrating a custom text classifier to a spacy pipeline</h1><p class="page-description">Customize Spacy pipelines with your custom components</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
+        Feb 1, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      2 min read
+      1 min read
     
 </span></p>
 
@@ -89,73 +89,78 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/til/categories/#en">en</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/til/categories/#bigdata">bigdata</a>
+        <a class="category-tags-link" href="/til/categories/#python">python</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#nlp">nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#spacy">spacy</a>
         
       
       </p>
     
 
-    </header>
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/til/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/til/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/til/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h1 id="hadoop-platform-and-application-framework">Hadoop Platform and Application Framework</h1>
-<h2 id="lesson-1">Lesson 1</h2>
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb
+-->
 
-<p>Hadoop Stack: [ Clients ] &gt; [ MapReduce ] &gt; [ YARN ] &gt; [ HDFS ]</p>
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Spacy is a Natural Language Processing (NLP) library and framework to productionalize Machine Learning and NLP applications.</p>
+<p>There are loads of resources on training a Spacy component such as a NER, text classification or other basic NLP components, but I couldn't find one that finished the work well, i.e. where you'd end up with a full-fledged pre-trained model for common components such as Dependency Parsing, POS tagging or NER <strong>and</strong> a custom component to predict a specific task.</p>
+<p>This is what this notebook / post is here to do: <strong>guide you through the whole process of configuring a text classification component, training it from python and integrating it into a fully featured pre-trained model, to be reused from anywhere else</strong>.</p>
 
-<ol>
-  <li>Hadoop File System: Distributed, scalable and portable file-system written in Java for the Hadoop framework
-    <ul>
-      <li>replicates accross several hosts</li>
-      <li>system is composed of Namenode(s) which keep some metadata on the contained folders (e.g. name, number of replica…) and Datanodes which contain the (replicated) data blocks.</li>
-      <li>secondary namenode: scans and builds snapshots of the primary namenode (raptures information, location etc.)</li>
-      <li>A Hadoop based system always sits on some version of a MapReduce engine:</li>
-    </ul>
-    <ul>
-      <li>Job/Task trackers: job tracker on the namenode (client’s job tracking) and task tracker on the datanodes (operation tracking)</li>
-      <li>MapReduceV2 -&gt; YARN (Hadoop 2.0): Separates the research management and process component (generalization of the hadoop architecture to other processing than mapreduce)</li>
-      <li>Before YARN, the hdfs stack was [ MapReduce ] &gt; [ HDFS ], now it is possible to have others data processing: [ Map Reduce | Others ] &gt; [ YARN ] &gt; [ HDFS ]
-      - Yarns = scheduling, MapReduce (in V2) = data processing</li>
-    </ul>
-  </li>
-  <li>The Hadoop Zoo
-    <ul>
-      <li>Started from the Google FS, and incrementally added functionalities (SQL like queries, BigTable, Sawzall, …) -&gt; variations accross big tech companies, but with the same global architecture:
- (cloudera’s implem)
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> [ UI Framework (hue) | SDK (hue) ]
- [ Workflow mgmt (oozie) | Scheduling (oozie) | Metadata (Hive) ]
- [ Data Integration (flume, sqoop) | [ Languages, compilers (pig/hive) ] &gt; [ Hadoop ] | Fast read/write access (hbase) ]
- [ Coordination (zookeeper) ]
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-  <li>Hadoop Ecosystem Major Components
-    <ul>
-      <li>PIG:</li>
-    </ul>
-    <ul>
-      <li>High level programming on to for Hadoop MapReduce</li>
-      <li>Multiple languages: JPython, Java …</li>
-      <li>Data analysis problems as data flows</li>
-      <li>Pig for ETL: inport, extract, transform, write back on the hdfs [Q: difference with Beam ?]
-      - Hive:</li>
-      <li>Facilitates queriying and managing large datasets in distributed storage</li>
-      <li>Hive QL
-      - Oozie:</li>
-      <li>Workflow scheduler to manage Hadoop jobs</li>
-      <li>Coordinator jobs</li>
-      <li>Supports: MapReduce, Pig, Hive, Sqoop…
-      - Zookeeper:</li>
-      <li>Provides centralized, AOM and synchronization
-      - Flume:</li>
-      <li>Distributed, reliable and available service for collecting, aggregating and moving large amount of log data
-      - Many others (Impala, Cloudera search, Spark, Majout, …)
-      - Spark:</li>
-      <li>Parallel, in-memory, large scale data processing</li>
-    </ul>
-  </li>
-</ol>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-data-&amp;-the-classification-task">The data &amp; the classification task<a class="anchor-link" href="#The-data-&amp;-the-classification-task"> </a></h2><p>We'll work from dataset which is extracted through the reddit API. I've prepared it so that it can be easily imported and converted into spacy docs.</p>
+<p>You can find the dataset (here)[/til/assets/csv/reddit_data.csv]</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Creating-and-configuring-a-Text-Classification-component">Creating and configuring a Text Classification component<a class="anchor-link" href="#Creating-and-configuring-a-Text-Classification-component"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
@@ -165,7 +170,7 @@ window.onload = wrap_img;
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/til/en/bigdata/2020/11/02/hadoop-course-notes.html" hidden></a>
+</script><a class="u-url" href="/til/en/python/nlp/spacy/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" hidden></a>
 </article>
 
       </div>
