@@ -39,8 +39,9 @@ baseurl: "/til" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: fastdotai
-    github: fastai
+    twitter: ycouble
+    github: ycouble
+    gitlab: ycouble
 
 # Set this to true to get LaTeX math equation support
 use_math: 
@@ -64,6 +65,7 @@ exclude:
   - docker-compose.yml
   - action.yml
   - Makefile
+  - settings.ini
 
 # this setting allows you to keep pages organized in the _pages folder
 include:
@@ -120,6 +122,4 @@ kramdown:
 feed:
   posts_limit: 5 #default posts_limit: 10
   excerpt_only: true
-  
-exclude:
-  - settings.ini
+
