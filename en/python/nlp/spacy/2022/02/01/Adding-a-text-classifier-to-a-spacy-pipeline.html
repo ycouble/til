@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      12 min read
     
 </span></p>
 
@@ -146,15 +146,705 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pre-requisites">Pre-requisites<a class="anchor-link" href="#Pre-requisites"> </a></h3><p>First let's install the pacakges we're going to need for this tutorial</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pip</span> install -q &quot;spacy&gt;3.0.0&quot; pandas sklearn
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Note: you may need to restart the kernel to use updated packages.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We'll also need to download a pretrained model from spaCy english models: <a href="https://spacy.io/models/en#en_core_web_md">https://spacy.io/models/en#en_core_web_md</a>. The following command needs to be executed from the same environment as your notebook kernel.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>python -m spacy download en_core_web_md
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="The-data-&amp;-the-classification-task">The data &amp; the classification task<a class="anchor-link" href="#The-data-&amp;-the-classification-task"> </a></h2><p>We'll work from dataset which is extracted through the reddit API. I've prepared it so that it can be easily imported and converted into spacy docs.</p>
-<p>You can find the dataset (here)[/til/assets/csv/reddit_data.csv]</p>
+<p>You can find the dataset <a href="spacy_textcat/reddit_data.csv">here</a>.</p>
+<p>The dataset is a simple extract from Reddit of different posts body from a selection of subreddits related to data science. The objectif of our task will be to guess from the text to which subreddit the post comes from. Even though the interest is limited, this is a good use case to start with and easy to obtain labelled data from.</p>
+<p>Let's load the dataset to inspect what is inside.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_colwidth</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;spacy_textcat/reddit_data.csv&quot;</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>tag</th>
+      <th>subreddit</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>I’m looking for datasets or api source that quantifies fan base, or preferably, bettors’ sentiment regarding a team’s performance or direction. Does anyone know of an API that tracks this? For now I’m looking specifically for NBA, but am also interested in MLB, NFL, and NCAA f-ball and b-ball.</td>
+      <td>API</td>
+      <td>datasets</td>
+      <td>s0vufk</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>I'm making an ESG stock analysis program in Java, and so far the only free ESG API I've come across is ESGEnterprise, but I'm having trouble retrieving the data. Has anyone had any success/have any recs for other ESG APIs out there.</td>
+      <td>API</td>
+      <td>datasets</td>
+      <td>ruvj9n</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Hey everyone! I’m one of the creators of Sieve _URL_ and I’m excited to be sharing it!\nSieve _URL_ **is an API that helps you turn petabyte-scale video data into a high-quality dataset, automatically.**\nIt helps store, process, and semantically search your video data. Just think _NUMBER_ cameras recording footage at _NUMBER_ FPS, _NUMBER_/_NUMBER_. That would be _NUMBER_ million frames generated in a single day. The videos might be searchable by timestamp, but finding moments of interest is like searching for a needle in a haystack. Sieve tags useful attributes like people, motion, lighting, etc on every frame!\nWe built this visual demo (link here _URL_ a little while back which we’d love to get feedback on. It’s \~_NUMBER_ hours of security footage that our API processed in &lt;_NUMBER_ mins and has simple querying and export functionality enabled. We see applications in better understanding what data you have, figuring out which data to send to labeling, sampling datasets for training, and building multiple test sets for models by scenario.\nTo try it on your videos: _URL_ _URL_\nVisual dashboard walkthrough: Click on our site link!</td>
+      <td>API</td>
+      <td>datasets</td>
+      <td>rup1uj</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>718</th>
+      <td>I'm currently in the process of learning NLP. I am using catalyst on c#. \nI was able to run the sample programs and it was able to determine if the word is an noun, adjective, etc. But I can't find any sample for what I need.\nHere is a summary of what I would like to achieve. \nI would like to extract certain information on a sentence. Lets say i have the following texts:\n"Sally ate an orange this morning. "\nOr \n"Sally is hiding behind the cabinet and she is eating an orange. " \nHow do i use the nlp to extract what sally ate?</td>
+      <td>NaN</td>
+      <td>LanguageTechnology</td>
+      <td>saas64</td>
+    </tr>
+    <tr>
+      <th>719</th>
+      <td>I’ve been trying to do some basic keyword extraction and finding it harder than expected.\nKeyBERT seems good but it requires a powerful GPU to be usably fast. That’s possible with AWS, but there’s a bit more set up.\nI just tried PyTextRank, and I was surprised at the quality of the output - I wouldn’t say it was perfect either. Maybe I should set a threshold, like choose the top _NUMBER_ ranked keywords? It’s fine if we exclude potential good keywords just to have a smaller list of good ones.\nHere’s a good article about _NUMBER_ different methods, which is helpful -\n_URL_\nIn theory, Spacy and BERT seem like the best options but they’re both a little complex. \nI think KW extraction really only needs a few layers or as Spacy would call them pipelines.\n_NUMBER_. accurate tokenization of words and punctuation symbols\n_NUMBER_. accurate recognition of multi-word expressions  - think of it as “chunking”\n_NUMBER_. Strong assessment of keyword “candidacy” for each MWE \nOf course, a good algorithm can often skip steps. Like BERT is so smart it doesn’t need anything but the input text.\nDoes anyone know of a simplest way to run a fast, effective keyword extraction?\nI’m talking _NUMBER_ keywords in one second on a fast CPU.\nThanks very much</td>
+      <td>NaN</td>
+      <td>LanguageTechnology</td>
+      <td>s7qml8</td>
+    </tr>
+    <tr>
+      <th>720</th>
+      <td>This _URL_ position is currently open and I wanted to share with you!</td>
+      <td>NaN</td>
+      <td>LanguageTechnology</td>
+      <td>s30ccv</td>
+    </tr>
+  </tbody>
+</table>
+<p>721 rows × 4 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cats</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">subreddit</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">cats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;datasets&#39;, &#39;dataengineering&#39;, &#39;LanguageTechnology&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The dataset is composed of ~700 cleaned texts along with the subredddit they've been extracted from on Reddit. Let's now create the Spacy training / validation data by annotating spacy docs created from the texts.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Creating-the-training-dataset">Creating the training dataset<a class="anchor-link" href="#Creating-the-training-dataset"> </a></h2><p>First let's make a function to transform the dataset into a spacy dataset that we'll need to store locally.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">DocBin</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="c1"># Load spaCy pretrained model that we downloaded before</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_md&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a function to create a spacy dataset</span>
+<span class="k">def</span> <span class="nf">make_docs</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">target_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cats</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="n">docs</span> <span class="o">=</span> <span class="n">DocBin</span><span class="p">()</span>
+    <span class="c1"># Use nlp.pipe to efficiently process a large number of text inputs, </span>
+    <span class="c1"># the as_tuple arguments enables giving a list of tuples as input and </span>
+    <span class="c1"># reuse it in the loop, here for the labels</span>
+    <span class="k">for</span> <span class="n">doc</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">as_tuples</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># Encode the labels (assign 1 the subreddit)</span>
+        <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">:</span>
+            <span class="n">doc</span><span class="o">.</span><span class="n">cats</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cat</span> <span class="o">==</span> <span class="n">label</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">docs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+    <span class="n">docs</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">docs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's now split the dataset into training and validation datasets, and store them for training</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;subreddit&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">make_docs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)),</span> <span class="s2">&quot;train.spacy&quot;</span><span class="p">,</span> <span class="n">cats</span><span class="o">=</span><span class="n">cats</span><span class="p">)</span>
+<span class="n">make_docs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)),</span> <span class="s2">&quot;valid.spacy&quot;</span><span class="p">,</span> <span class="n">cats</span><span class="o">=</span><span class="n">cats</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;spacy.tokens._serialize.DocBin at 0x12b189100&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Creating-and-configuring-a-Text-Classification-component">Creating and configuring a Text Classification component<a class="anchor-link" href="#Creating-and-configuring-a-Text-Classification-component"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The recommended training workflow with SpaCy uses config files. They enable to configure each component of the model pipeline, set which components can be trained etc.</p>
+<p>We'll use <a href="spacy_textcat/config.cfg">this configuration file</a>, which uses the default text classifier model from spacy. It was generated through this SpaCy tool: <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> and customized to use the default text classification model from: <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
+<p>The important parts in the file are the following:</p>
+<ol>
+<li>The pipeline definition (under the <code>nlp</code> tag): The pipeline is composed only of a textcat component since it is the only one we have labelled data for and the only one we are going to train today. Also important to mention is the tokenizer component that we have left to the spacy default, but could be customized. This is the only component that we need to train our <code>textcat</code> component.</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="kc">nl</span><span class="err">p</span><span class="p">]</span>
+<span class="err">la</span><span class="kc">n</span><span class="err">g</span> <span class="err">=</span> <span class="s2">&quot;en&quot;</span>
+<span class="err">pipeli</span><span class="kc">ne</span> <span class="err">=</span> <span class="p">[</span><span class="s2">&quot;textcat&quot;</span><span class="p">]</span>
+<span class="err">ba</span><span class="kc">t</span><span class="err">ch_size</span> <span class="err">=</span> <span class="mi">1000</span>
+<span class="err">disabled</span> <span class="err">=</span> <span class="p">[]</span>
+<span class="err">be</span><span class="kc">f</span><span class="err">ore_crea</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="err">=</span> <span class="kc">null</span>
+<span class="err">a</span><span class="kc">fter</span><span class="err">_crea</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="err">=</span> <span class="kc">null</span>
+<span class="err">a</span><span class="kc">fter</span><span class="err">_pipeli</span><span class="kc">ne</span><span class="err">_crea</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span> <span class="err">=</span> <span class="kc">null</span>
+<span class="kc">t</span><span class="err">oke</span><span class="kc">n</span><span class="err">izer</span> <span class="err">=</span> <span class="p">{</span><span class="nt">&quot;@tokenizers&quot;</span><span class="p">:</span><span class="s2">&quot;spacy.Tokenizer.v1&quot;</span><span class="p">}</span>
+</pre></div>
+<ol>
+<li>The model specification: Almost all parameters set to defaults except the <code>exclusive_classes</code>set to <code>true</code> since our posts only come from one subreddit (although that might be questionned). Note that compared to the config given in the documentation, we had to add the <code>components.textcat</code> prefix to the headers.</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="err">compo</span><span class="kc">nents</span><span class="err">.</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">ca</span><span class="kc">t</span><span class="p">]</span>
+<span class="kc">fa</span><span class="err">c</span><span class="kc">t</span><span class="err">ory</span> <span class="err">=</span> <span class="s2">&quot;textcat&quot;</span>
+<span class="err">scorer</span> <span class="err">=</span> <span class="p">{</span><span class="nt">&quot;@scorers&quot;</span><span class="p">:</span><span class="s2">&quot;spacy.textcat_scorer.v1&quot;</span><span class="p">}</span>
+<span class="kc">t</span><span class="err">hreshold</span> <span class="err">=</span> <span class="mf">0.5</span>
+
+<span class="p">[</span><span class="err">compo</span><span class="kc">nents</span><span class="err">.</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">ca</span><span class="kc">t</span><span class="err">.model</span><span class="p">]</span>
+<span class="err">@archi</span><span class="kc">te</span><span class="err">c</span><span class="kc">tures</span> <span class="err">=</span> <span class="s2">&quot;spacy.TextCatBOW.v2&quot;</span>
+<span class="err">exclusive_classes</span> <span class="err">=</span> <span class="kc">true</span>
+<span class="kc">n</span><span class="err">gram_size</span> <span class="err">=</span> <span class="mi">1</span>
+<span class="kc">n</span><span class="err">o_ou</span><span class="kc">t</span><span class="err">pu</span><span class="kc">t</span><span class="err">_layer</span> <span class="err">=</span> <span class="kc">false</span>
+<span class="kc">n</span><span class="err">O</span> <span class="err">=</span> <span class="kc">null</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<details>
+  <summary>More details on SpaCy Pipelines</summary>
+The spacy pipeline is a modular and highly configurable workflow for processing texts. As shown below, there is a mandatory first step of tokenizing the text, then there are a succession of pipeline components (or pipes) that are executed in order, but do not necessarily rely on each other. It will be in the code of a component that the dependency would be set, e.g. by accessing previously set attributes in the doc element.
+![](/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png)
+</details>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Training-the-text-classification-component">Training the text classification component<a class="anchor-link" href="#Training-the-text-classification-component"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Unlike what can be found in most of the tutorials online or in the SpaCy docs where training is started from CLI, we're going to train the component from a config file and from a python script.
+This has the advantage of letting us start the training programatically, e.g. from a data pipeline (using airflow, dagster or such).</p>
+<p>However, we'll use the spacy pre-built training function from <code>spacy.cli.train</code> in order to benefit from all the checks and logging that are set up in the CLI. (Another approach would be to reuse parts of the code, calling directly the <code>spacy.training</code> module instead)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">spacy.cli.train</span> <span class="kn">import</span> <span class="n">train</span> <span class="k">as</span> <span class="n">spacy_train</span>
+
+<span class="n">config_path</span> <span class="o">=</span> <span class="s2">&quot;spacy_textcat/config.cfg&quot;</span>
+<span class="n">output_model_path</span> <span class="o">=</span> <span class="s2">&quot;output/spacy_textcat&quot;</span>
+<span class="n">spacy_train</span><span class="p">(</span>
+    <span class="n">config_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="n">output_model_path</span><span class="p">,</span>
+    <span class="n">overrides</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;paths.train&quot;</span><span class="p">:</span> <span class="s2">&quot;train.spacy&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;paths.dev&quot;</span><span class="p">:</span> <span class="s2">&quot;valid.spacy&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-blue-fg">ℹ Saving to output directory: output/spacy_textcat</span>
+<span class="ansi-blue-fg">ℹ Using CPU</span>
+<span class="ansi-bold">
+=========================== Initializing pipeline ===========================</span>
+<span class="ansi-green-fg">✔ Initialized pipeline</span>
+<span class="ansi-bold">
+============================= Training pipeline =============================</span>
+<span class="ansi-blue-fg">ℹ Pipeline: [&#39;textcat&#39;]</span>
+<span class="ansi-blue-fg">ℹ Initial learn rate: 0.001</span>
+E    #       LOSS TEXTCAT  CATS_SCORE  SCORE 
+---  ------  ------------  ----------  ------
+  0       0          0.67        3.31    0.03
+  0     200         97.52       46.14    0.46
+  0     400         59.67       61.38    0.61
+  1     600         19.23       73.74    0.74
+  1     800         11.17       75.77    0.76
+  2    1000          2.12       74.20    0.74
+  3    1200          1.19       75.33    0.75
+  4    1400          0.71       76.68    0.77
+  4    1600          0.35       75.91    0.76
+  6    1800          0.28       77.79    0.78
+  7    2000          0.21       77.91    0.78
+  9    2200          0.18       77.49    0.77
+ 11    2400          0.06       79.36    0.79
+ 13    2600          0.05       77.81    0.78
+ 16    2800          0.03       77.81    0.78
+ 19    3000          0.03       77.98    0.78
+ 21    3200          0.03       77.05    0.77
+ 24    3400          0.06       77.95    0.78
+ 27    3600          0.02       76.41    0.76
+ 30    3800          0.03       75.48    0.75
+ 32    4000          0.02       77.60    0.78
+<span class="ansi-green-fg">✔ Saved pipeline to output directory</span>
+output/spacy_textcat/model-last
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now have a trained classification model !
+Spacy stores the model in folders, and usually saves both the best model and the last state of the model at the end of the training, in case we'd want to continue training from this step.
+In the <code>meta.json</code> file in the model folder you can find the internal scores that were computed, and we can see that we have ~80% Macro F score and a nice .93 AUC.</p>
+<p>We can import the newly trained pipeline from spacy to predict like this:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="n">trained_nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;output/spacy_textcat/model-best&quot;</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s try it on an example text</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hello</span><span class="se">\n</span><span class="s2"> I&#39;m looking for data about birds in New Zealand.</span><span class="se">\n</span><span class="s2">The dataset would contain the birds species, colors, estimated population etc.&quot;</span>
+<span class="c1"># Perform the trained pipeline on this text</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">trained_nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="c1"># We can display the predicted categories</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">cats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;datasets&#39;: 0.8466417193412781,
+ &#39;dataengineering&#39;: 0.07126601785421371,
+ &#39;LanguageTechnology&#39;: 0.08209223300218582}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We see that the model predicts the subreddit <code>datasets</code> with 84% confidence !</p>
+<p>However, the rest of the trained pipeline is empty, NER, dependencies etc. have not been computed.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;entities&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sentences&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sentences&quot;</span><span class="p">,</span> <span class="s2">&quot;error:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>entities ()
+sentences error: [E030] Sentence boundaries unset. You can add the &#39;sentencizer&#39; component to the pipeline with: `nlp.add_pipe(&#39;sentencizer&#39;)`. Alternatively, add the dependency parser or sentence recognizer, or set sentence boundaries by setting `doc[i].is_sent_start`.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>These are however, available with high quality in the pre-trained pipeline that we used earlier. But not the classification, obviously.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">doc_from_pretrained</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;entities&quot;</span><span class="p">,</span> <span class="n">doc_from_pretrained</span><span class="o">.</span><span class="n">ents</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sentences&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">doc_from_pretrained</span><span class="o">.</span><span class="n">sents</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">doc_from_pretrained</span><span class="o">.</span><span class="n">cats</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>entities (New Zealand,)
+sentences [Hello
+ I&#39;m looking for data about birds in New Zealand., 
+, The dataset would contain the birds species, colors, estimated population etc.]
+classification {}
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The question is, then, <strong>how do we combine both pipelines</strong> without having to implement a lot of glue code for nothing ?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Integrate-the-new-component-to-an-existing-pipeline">Integrate the new component to an existing pipeline<a class="anchor-link" href="#Integrate-the-new-component-to-an-existing-pipeline"> </a></h2><p>There are actually several ways to do this:</p>
+<ol>
+<li>Creating a pipe and loading the model from files, but this would require a different training process than what we did (on a model level and not pipeline level)<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;path/to/model/files&quot;</span><span class="p">)</span> <span class="c1"># Note, requires a different folder structure that what we&#39;ve generated</span>
+</pre></div>
+</li>
+<li>Loading the pipeline, saving the model to disk/bytes and loading it back again from disk/bytes in a new pipe in the pretrained pipeline<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+<span class="c1"># OR</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span>
+ <span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</li>
+<li>Creating the pipe with a source pipeline.</li>
+</ol>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nlp_merged</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_md&quot;</span><span class="p">)</span>
+<span class="n">nlp_merged</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">trained_nlp</span><span class="p">)</span>
+<span class="n">doc_from_merged</span> <span class="o">=</span> <span class="n">nlp_merged</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;entities&quot;</span><span class="p">,</span> <span class="n">doc_from_merged</span><span class="o">.</span><span class="n">ents</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sentences&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">doc_from_merged</span><span class="o">.</span><span class="n">sents</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">doc_from_merged</span><span class="o">.</span><span class="n">cats</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>entities (New Zealand,)
+sentences [Hello
+ I&#39;m looking for data about birds in New Zealand., 
+, The dataset would contain the birds species, colors, estimated population etc.]
+classification {&#39;datasets&#39;: 0.8466417193412781, &#39;dataengineering&#39;: 0.07126601785421371, &#39;LanguageTechnology&#39;: 0.08209223300218582}
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/yco/.pyenv/versions/myreddit/lib/python3.8/site-packages/spacy/language.py:707: UserWarning: [W113] Sourced component &#39;textcat&#39; may not work as expected: source vectors are not identical to current pipeline vectors.
+  warnings.warn(Warnings.W113.format(name=source_name))
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<details>
+<summary>Removing the warning</summary>
+To remove the vector mis-alignment, you'd have to train the pipeline by passing the pre-trained tok2vec component from the pre-trained model. In our case it's not a problem since the vectors are probably very similar, but nonetheless, I'll try to update the post when I can with the solution to this warning.
+</details>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From this point we can store and reuse the pipeline at will !</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion"> </a></h2><p>We've seen in this tutorial how to train and integrate a text classification component to a pre-trained pipeline, in a fully programmatic way.</p>
+<p>Hope you liked the post and feel free to contact me if you want more details in the comments !</p>
+
 </div>
 </div>
 </div>
