@@ -4,21 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Training and integrating a custom text classifier to a spacy pipeline | yco-til</title>
+<title>Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy | yco-til</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
+<meta property="og:title" content="Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Customize Spacy pipelines with your custom components" />
-<meta property="og:description" content="Customize Spacy pipelines with your custom components" />
-<link rel="canonical" href="https://ycouble.github.io/til/en/python/nlp/spacy/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
-<meta property="og:url" content="https://ycouble.github.io/til/en/python/nlp/spacy/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
+<meta name="description" content="Customiser une pipelines SpaCy avec vos propres composants de NLP" />
+<meta property="og:description" content="Customiser une pipelines SpaCy avec vos propres composants de NLP" />
+<link rel="canonical" href="https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
 <meta property="og:site_name" content="yco-til" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-02-01T00:00:00-06:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
+<meta property="twitter:title" content="Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","description":"Customize Spacy pipelines with your custom components","headline":"Training and integrating a custom text classifier to a spacy pipeline","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"},"url":"https://ycouble.github.io/til/en/python/nlp/spacy/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","description":"Customiser une pipelines SpaCy avec vos propres composants de NLP","headline":"Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"},"url":"https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="yco-til" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,20 +73,20 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Training and integrating a custom text classifier to a spacy pipeline</h1><p class="page-description">Customize Spacy pipelines with your custom components</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Entraînement et intégration d&#39;un classifieur de textes à une pipeline SpaCy</h1><p class="page-description">Customiser une pipelines SpaCy avec vos propres composants de NLP</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
         Feb 1, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      13 min read
     
 </span></p>
 
     
       <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
       
-        <a class="category-tags-link" href="/til/categories/#en">en</a>
+        <a class="category-tags-link" href="/til/categories/#fr">fr</a>
         &nbsp;
       
         <a class="category-tags-link" href="/til/categories/#python">python</a>
@@ -109,19 +109,19 @@ window.onload = wrap_img;
         <div class="pb-5 d-flex flex-justify-center">
           <div class="px-2">
 
-    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" role="button" target="_blank">
+    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" role="button" target="_blank">
 <img class="notebook-badge-image" src="/til/assets/badges/github.svg" alt="View On GitHub">
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" target="_blank">
+    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/til/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb" target="_blank">
+    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/til/assets/badges/colab.svg" alt="Open In Colab"/>
     </a>
 </div>
@@ -133,23 +133,23 @@ window.onload = wrap_img;
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb
+# file to edit: _notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb
 -->
 
 <div class="container" id="notebook-container">
         
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Spacy is a Natural Language Processing (NLP) library and framework to productionalize Machine Learning and NLP applications.</p>
-<p>There are loads of resources on training a Spacy component such as a NER, text classification or other basic NLP components, but I couldn't find one that finished the work well, i.e. where you'd end up with a full-fledged pre-trained model for common components such as Dependency Parsing, POS tagging or NER <strong>and</strong> a custom component to predict a specific task.</p>
-<p>This is what <a href="https://github.com/ycouble/til/blob/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb">this notebook</a> / post is here to do: <strong>guide you through the whole process of configuring a text classification component, training it from python and integrating it into a fully featured pre-trained model, to be reused from anywhere else</strong>.</p>
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Spacy est une bibliothèque de Traitement Automatique du Langage Naturel (TANL ou NLP en anglais) et un framework pour industrialiser des applications de NLP et de Machine Learning.</p>
+<p>Les ressources pour entraîner un modèle de machine learning sur du texte (classification, extraction d'entités, etc.) avec SpaCy ne manquent pas, mais très peu vont jusqu'au bout du chemin: l'intégration avec d'autres composants standards et pré-entraînés de SpaCy (ou d'autres fournisseurs), tels qu'un DependencyParser, tagger POS qui ne nécessitent pas de spécialisation ou de fine tuning.</p>
+<p>C'est pour combler ce manque que <a href="https://github.com/ycouble/til/blob/master/_notebooks/2022-02-01-Entrainement-et-intégration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb">ce notebook</a> existe : <strong>vous guider dans le process de configuration d'un composant de classification de textes, de l'entraînement depuis un script python et jusqu'à son intégration dans une pipeline SpaCy pré-entraînée afin qu'elle soit réutilisable depuis le reste de vos applications.</strong>.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Pre-requisites">Pre-requisites<a class="anchor-link" href="#Pre-requisites"> </a></h3><p>First let's install the pacakges we're going to need for this tutorial</p>
+<h3 id="Pre-requis">Pre-requis<a class="anchor-link" href="#Pre-requis"> </a></h3><p>Tout d'abord, installons les packages nécessaires pour ce tutoriel: spacy pour le NLP, pandas pour inspecter nos données, et sklearn qui va faciliter la séparation du jeu de données en splits.</p>
 
 </div>
 </div>
@@ -187,7 +187,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We'll also need to download a pretrained model from spaCy english models: <a href="https://spacy.io/models/en#en_core_web_md">https://spacy.io/models/en#en_core_web_md</a>. The following command needs to be executed from the same environment as your notebook kernel.</p>
+<p>Nous devons également télécharger un modèle pré-entraîné de SpaCy : <a href="https://spacy.io/models/en#en_core_web_md">https://spacy.io/models/en#en_core_web_md</a>. La ligne de commande suivante doit être exécutée depuis le même environnement que votre kernel de notebook.</p>
 
 </div>
 </div>
@@ -211,10 +211,12 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="The-data-&amp;-the-classification-task">The data &amp; the classification task<a class="anchor-link" href="#The-data-&amp;-the-classification-task"> </a></h2><p>We'll work from dataset which is extracted through the reddit API. I've prepared it so that it can be easily imported and converted into spacy docs.</p>
-<p>You can find the dataset <a href="spacy_textcat/reddit_data.csv">here</a>.</p>
-<p>The dataset is a simple extract from Reddit of different posts body from a selection of subreddits related to data science. The objectif of our task will be to guess from the text to which subreddit the post comes from. Even though the interest is limited, this is a good use case to start with and easy to obtain labelled data from.</p>
-<p>Let's load the dataset to inspect what is inside.</p>
+<h2 id="Les-donn&#233;es-&amp;-la-t&#226;che-de-classification">Les donn&#233;es &amp; la t&#226;che de classification<a class="anchor-link" href="#Les-donn&#233;es-&amp;-la-t&#226;che-de-classification"> </a></h2><p>Nous travaillerons sur un dataset qui a été extrait à travers l'API de reddit. Le dataset a déjà été préparé et nettoyé pour qu'il puisse être facilement importé et converti en documents SpaCy.
+Vous pourrez le trouver <a href="spacy_textcat/reddit_data.csv">ici</a>.</p>
+<p>Le dataset est composé du corps de texte d'une selection de posts provenant de quelques subreddits liés à la data science.
+L'objectif de notre tâche de machine learning sera de deviner à partir du corps de texte de quel subreddit le post provient.
+Même si l'intérêt en soi est assez limité, c'est un bon point de départ pour démarrer et il présente l'avantage d'être déjà annoté.</p>
+<p>Jettons un oeil à ce qu'il y a dans le dataset.</p>
 
 </div>
 </div>
@@ -369,14 +371,15 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The dataset is composed of ~700 cleaned texts along with the subredddit they've been extracted from on Reddit. Let's now create the Spacy training / validation data by annotating spacy docs created from the texts.</p>
+<p>Le dataset est composé d'un peu plus de 700 posts et de leurs subreddits associé.
+Créons maintenant les datasets d'entraînement et de validation en y incluant les annotations.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Creating-the-training-dataset">Creating the training dataset<a class="anchor-link" href="#Creating-the-training-dataset"> </a></h2><p>First let's make a function to transform the dataset into a spacy dataset that we'll need to store locally.</p>
+<h2 id="Cr&#233;ation-du-dataset-d'entra&#238;nement">Cr&#233;ation du dataset d'entra&#238;nement<a class="anchor-link" href="#Cr&#233;ation-du-dataset-d'entra&#238;nement"> </a></h2><p>Tout d'abord écrivons une fonction permettant de transformer le dataset dans le format binaire pour spacy, que l'on va stocker temporairement en local.</p>
 
 </div>
 </div>
@@ -419,7 +422,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's now split the dataset into training and validation datasets, and store them for training</p>
+<p>Séparons jeux d'entraînement et de validation.</p>
 
 </div>
 </div>
@@ -464,17 +467,18 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Creating-and-configuring-a-Text-Classification-component">Creating and configuring a Text Classification component<a class="anchor-link" href="#Creating-and-configuring-a-Text-Classification-component"> </a></h2>
+<h2 id="Creation-et-configuration-du-composant-de-classification-de-textes">Creation et configuration du composant de classification de textes<a class="anchor-link" href="#Creation-et-configuration-du-composant-de-classification-de-textes"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The recommended training workflow with SpaCy uses config files. They enable to configure each component of the model pipeline, set which components can be trained etc.</p>
-<p>We'll use <a href="spacy_textcat/config.cfg">this configuration file</a>, which uses the default text classifier model from spacy. It was generated through this SpaCy tool: <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> and customized to use the default text classification model from: <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
-<p>The important parts in the file are the following:</p>
+<p>Le workflow recommandé avec SpaCy utilise des fichiers de configuration. Ils permettent de configurer chaque composant de la pipeline, de choisir quels composant entrâiner etc.</p>
+<p>Nous utiliserons <a href="spacy_textcat/config.cfg">ce fichier de configuration</a>, qui utilises le classifieur de textes par défaut de SpaCy.
+La configuration peut être re-générée en suivant ce guide : <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> et nous l'avons customisé pour qu'il utilise ce model proposé par SpaCy également : <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
+<p>Il y a deux parties qu'il est important de noter dans ce fichier :</p>
 <ol>
-<li>The pipeline definition (under the <code>nlp</code> tag): The pipeline is composed only of a textcat component since it is the only one we have labelled data for and the only one we are going to train today. Also important to mention is the tokenizer component that we have left to the spacy default, but could be customized. This is the only component that we need to train our <code>textcat</code> component.</li>
+<li>La définition de la pipeline (sous le header <code>nlp</code>): La pipeline ne contient que le composant textcat (de classification) puisque c'est celui pour lequel nous avons des données annotées et le seul que nous allons entraîner aujourd'hui. Un autre détail qui a son importance est le tokenizer qui, comme on peut le voir est spécifié à cet endroit, et est ici laissé à la valeur par défaut proposée par SpaCy. C'est le seul pré-requis pour notre composant <code>textcat</code>.</li>
 </ol>
 <div class="highlight"><pre><span></span><span class="p">[</span><span class="kc">nl</span><span class="err">p</span><span class="p">]</span>
 <span class="err">la</span><span class="kc">n</span><span class="err">g</span> <span class="err">=</span> <span class="s2">&quot;en&quot;</span>
@@ -487,7 +491,7 @@ window.onload = wrap_img;
 <span class="kc">t</span><span class="err">oke</span><span class="kc">n</span><span class="err">izer</span> <span class="err">=</span> <span class="p">{</span><span class="nt">&quot;@tokenizers&quot;</span><span class="p">:</span><span class="s2">&quot;spacy.Tokenizer.v1&quot;</span><span class="p">}</span>
 </pre></div>
 <ol>
-<li>The model specification: Almost all parameters set to defaults except the <code>exclusive_classes</code>set to <code>true</code> since our posts only come from one subreddit (although that might be questionned). Note that compared to the config given in the documentation, we had to add the <code>components.textcat</code> prefix to the headers.</li>
+<li>La spécification du modèle : Notons le paramètre  <code>exclusive_classes</code> qui a été mis à <code>true</code> puisque nos posts ne viennent que d'un seul subreddit. Notons aussi qu'il a fallu rajouter le prefix <code>components.textcat</code> dans les headers à la configuration donnée dans la documentation.</li>
 </ol>
 <div class="highlight"><pre><span></span><span class="p">[</span><span class="err">compo</span><span class="kc">nents</span><span class="err">.</span><span class="kc">te</span><span class="err">x</span><span class="kc">t</span><span class="err">ca</span><span class="kc">t</span><span class="p">]</span>
 <span class="kc">fa</span><span class="err">c</span><span class="kc">t</span><span class="err">ory</span> <span class="err">=</span> <span class="s2">&quot;textcat&quot;</span>
@@ -508,15 +512,9 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <details>
-  <summary>More details on SpaCy Pipelines</summary>
+  <summary>Plus de détails sur les pipelines SpaCy</summary>
 The spacy pipeline is a modular and highly configurable workflow for processing texts. As shown below, there is a mandatory first step of tokenizing the text, then there are a succession of pipeline components (or pipes) that are executed in order, but do not necessarily rely on each other. It will be in the code of a component that the dependency would be set, e.g. by accessing previously set attributes in the doc element.
-<figure>
-  
-    <img class="docimage" src="/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png" alt="" />
-    
-    
-</figure>
-
+![](/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png)
 </details>
 </div>
 </div>
@@ -869,7 +867,7 @@ To remove the vector mis-alignment, you'd have to train the pipeline by passing 
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/til/en/python/nlp/spacy/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" hidden></a>
+</script><a class="u-url" href="/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" hidden></a>
 </article>
 
       </div>
