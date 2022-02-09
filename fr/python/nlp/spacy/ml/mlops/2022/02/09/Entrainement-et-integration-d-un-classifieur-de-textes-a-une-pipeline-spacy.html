@@ -10,15 +10,15 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Customiser une pipelines SpaCy avec vos propres composants de NLP" />
 <meta property="og:description" content="Customiser une pipelines SpaCy avec vos propres composants de NLP" />
-<link rel="canonical" href="https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
-<meta property="og:url" content="https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
+<link rel="canonical" href="https://ycouble.github.io/til/fr/python/nlp/spacy/ml/mlops/2022/02/09/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/fr/python/nlp/spacy/ml/mlops/2022/02/09/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" />
 <meta property="og:site_name" content="yco-til" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-02-01T00:00:00-06:00" />
+<meta property="article:published_time" content="2022-02-09T00:00:00-06:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","description":"Customiser une pipelines SpaCy avec vos propres composants de NLP","headline":"Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"},"url":"https://ycouble.github.io/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-09T00:00:00-06:00","datePublished":"2022-02-09T00:00:00-06:00","description":"Customiser une pipelines SpaCy avec vos propres composants de NLP","headline":"Entraînement et intégration d’un classifieur de textes à une pipeline SpaCy","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/python/nlp/spacy/ml/mlops/2022/02/09/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"},"url":"https://ycouble.github.io/til/fr/python/nlp/spacy/ml/mlops/2022/02/09/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="yco-til" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,8 +73,8 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Entraînement et intégration d&#39;un classifieur de textes à une pipeline SpaCy</h1><p class="page-description">Customiser une pipelines SpaCy avec vos propres composants de NLP</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
-        Feb 1, 2022
+    <h1 class="post-title p-name" itemprop="name headline">Entraînement et intégration d&#39;un classifieur de textes à une pipeline SpaCy</h1><p class="page-description">Customiser une pipelines SpaCy avec vos propres composants de NLP</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-09T00:00:00-06:00" itemprop="datePublished">
+        Feb 9, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
     
@@ -98,6 +98,9 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/til/categories/#spacy">spacy</a>
         &nbsp;
       
+        <a class="category-tags-link" href="/til/categories/#ml">ml</a>
+        &nbsp;
+      
         <a class="category-tags-link" href="/til/categories/#mlops">mlops</a>
         
       
@@ -109,19 +112,19 @@ window.onload = wrap_img;
         <div class="pb-5 d-flex flex-justify-center">
           <div class="px-2">
 
-    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" role="button" target="_blank">
+    <a href="https://github.com/ycouble/til/tree/master/_notebooks/2022-02-09-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" role="button" target="_blank">
 <img class="notebook-badge-image" src="/til/assets/badges/github.svg" alt="View On GitHub">
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
+    <a href="https://mybinder.org/v2/gh/ycouble/til/master?filepath=_notebooks%2F2022-02-09-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/til/assets/badges/binder.svg" alt="Open In Binder"/>
     </a>
 </div>
 
           <div class="px-2">
-    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
+    <a href="https://colab.research.google.com/github/ycouble/til/blob/master/_notebooks/2022-02-09-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb" target="_blank">
         <img class="notebook-badge-image" src="/til/assets/badges/colab.svg" alt="Open In Colab"/>
     </a>
 </div>
@@ -133,7 +136,7 @@ window.onload = wrap_img;
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2022-02-01-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb
+# file to edit: _notebooks/2022-02-09-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb
 -->
 
 <div class="container" id="notebook-container">
@@ -513,23 +516,33 @@ La configuration peut être re-générée en suivant ce guide : <a href="https:/
 <div class="text_cell_render border-box-sizing rendered_html">
 <details>
   <summary>Plus de détails sur les pipelines SpaCy</summary>
-The spacy pipeline is a modular and highly configurable workflow for processing texts. As shown below, there is a mandatory first step of tokenizing the text, then there are a succession of pipeline components (or pipes) that are executed in order, but do not necessarily rely on each other. It will be in the code of a component that the dependency would be set, e.g. by accessing previously set attributes in the doc element.
-![](/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png)
+Une pipeline SpaCy est une architecture logicielle hautement modulaire et configurable spécialisée pour le traitement automatique de textes.
+Comme on peut le voir sur l'illustration plus bas, la pipeline contient une étape obligatoire qui est la tokenisation du document, brique de base utilisée par l'ensemble les algorithmes d'analyse de documents.
+Ensuite viennent une succession de composants (ou pipes) qui sont éxécutés dans l'ordre spécifié, mais qui ne dépendent pas nécessairement les uns des autres.
+Cela sera dans le code du composant que ces dépendences vont se définir, par exemple en accédant à des attributs définis dans l'objet document de SpaCy.
+<figure>
+  
+    <img class="docimage" src="/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png" alt="" />
+    
+    
+</figure>
+
 </details>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Training-the-text-classification-component">Training the text classification component<a class="anchor-link" href="#Training-the-text-classification-component"> </a></h2>
+<h2 id="Entra&#238;nement-du-composant-de-classification-de-textes">Entra&#238;nement du composant de classification de textes<a class="anchor-link" href="#Entra&#238;nement-du-composant-de-classification-de-textes"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Unlike what can be found in most of the tutorials online or in the SpaCy docs where training is started from CLI, we're going to train the component from a config file and from a python script.
-This has the advantage of letting us start the training programatically, e.g. from a data pipeline (using airflow, dagster or such).</p>
-<p>However, we'll use the spacy pre-built training function from <code>spacy.cli.train</code> in order to benefit from all the checks and logging that are set up in the CLI. (Another approach would be to reuse parts of the code, calling directly the <code>spacy.training</code> module instead)</p>
+<p>Contrairement à ce qui peut être trouvé dans la plupart des tutoriels en ligne ou dans la documentation de SpaCy où l'entraînement est démarré depuis la CLI, nous allons essayer de lancer l'entraînement du composant directement depuis un script python.
+Cela a l'avantage de pouvoir faire cette étape de manière programmatique, par exemple depuis une pipeline de donnée (avec airflow, dagster, ou équivalent).</p>
+<p>Toutefois, nous utiliserons la fonction <code>train</code> pré-définie dans <code>spacy.cli.train</code> de telles sorte à bénéficier des fonctionalités de logging, adaptations et autres vérifications qui sont utilisée dans la CLI.
+Notons que l'on peut tout à fait, et très facilement partir directement du module <code>spacy.training</code> et de gérer le logging / interaction avec le système de fichier par nous même, ce qui serait recommandé dans du code de production.</p>
 
 </div>
 </div>
@@ -611,10 +624,10 @@ output/spacy_textcat/model-last
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We now have a trained classification model !
-Spacy stores the model in folders, and usually saves both the best model and the last state of the model at the end of the training, in case we'd want to continue training from this step.
-In the <code>meta.json</code> file in the model folder you can find the internal scores that were computed, and we can see that we have ~80% Macro F score and a nice .93 AUC.</p>
-<p>We can import the newly trained pipeline from spacy to predict like this:</p>
+<p>Nous avons maintenant un modèle de classification entraîné !
+Spacy stocke le modèle dans des dossiers, et en sauve deux versions, le dernier état du modèle pour permettre de reprendre depuis ce checkpoint s'il on veut affiner le modèle, et le meilleur état du modèle observé pendant l'entraînement.
+Dans le fichier <code>meta.json</code> dans le dossier du modèle, on peut voir les scores interne qui ont été calculés pendant la validation, et l'on peut voir ici des scores de ~.8 en Macro F score et un AUC à .93.</p>
+<p>Le modèle ainsi entraîné et stocké peut ensuite être chargé via spacy de cette manière :</p>
 
 </div>
 </div>
@@ -665,8 +678,8 @@ In the <code>meta.json</code> file in the model folder you can find the internal
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We see that the model predicts the subreddit <code>datasets</code> with 84% confidence !</p>
-<p>However, the rest of the trained pipeline is empty, NER, dependencies etc. have not been computed.</p>
+<p>On voit que le document une fois traité par la nouvelle pipeline dispose d'un attributs <code>.cats</code> et que dans ce cas la catégorie <code>datasets</code> est prédite avec 84% de confiance.</p>
+<p>Cependant, le reste de la pipeline est vide : pas d'information syntaxique, de dépendance ou d'entités.</p>
 
 </div>
 </div>
@@ -709,7 +722,7 @@ sentences error: [E030] Sentence boundaries unset. You can add the &#39;sentenci
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>These are however, available with high quality in the pre-trained pipeline that we used earlier. But not the classification, obviously.</p>
+<p>Ces informations sont en revanche disponible et dans la pipeline pré-entraînée que nous avions utilisée au début (Mais évidemment, pas les catégories).</p>
 
 </div>
 </div>
@@ -754,20 +767,20 @@ classification {}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The question is, then, <strong>how do we combine both pipelines</strong> without having to implement a lot of glue code for nothing ?</p>
+<p>La question est donc, <strong>comment combiner les deux pipelines nativement</strong> sans avoir à charger deux modèles séparément et écrire beaucoup de code pour recoller les morceaux ?</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Integrate-the-new-component-to-an-existing-pipeline">Integrate the new component to an existing pipeline<a class="anchor-link" href="#Integrate-the-new-component-to-an-existing-pipeline"> </a></h2><p>There are actually several ways to do this:</p>
+<h2 id="Int&#233;gration-du-nouveaux-composant-dans-la-pipeline-existante">Int&#233;gration du nouveaux composant dans la pipeline existante<a class="anchor-link" href="#Int&#233;gration-du-nouveaux-composant-dans-la-pipeline-existante"> </a></h2><p>Il y a en fait plusieurs manière de le faire :</p>
 <ol>
-<li>Creating a pipe and loading the model from files, but this would require a different training process than what we did (on a model level and not pipeline level)<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
+<li>Créer un pipe et charger le modèle à partir du système de fichiers, mais cela aurait demandé d'utiliser un processus d'entraînement différent de celui que nous avons utilisé ici.<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
 <span class="n">pipe</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;path/to/model/files&quot;</span><span class="p">)</span> <span class="c1"># Note, requires a different folder structure that what we&#39;ve generated</span>
 </pre></div>
 </li>
-<li>Loading the pipeline, saving the model to disk/bytes and loading it back again from disk/bytes in a new pipe in the pretrained pipeline<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+<li>Charger la pipeline, sauver le modèle du composant dans un fichier ou sous forme binaire, et le charger à nouveau dans un second temps depuis le disque / le binaire dans un nouveau pipe ajouté à la pipeline pré-entraînée.<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="c1"># OR</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span>
@@ -775,7 +788,7 @@ classification {}
 <span class="p">)</span>
 </pre></div>
 </li>
-<li>Creating the pipe with a source pipeline.</li>
+<li>Créer le pipe depuis une pipeline source.</li>
 </ol>
 
 </div>
@@ -833,24 +846,16 @@ classification {&#39;datasets&#39;: 0.8466417193412781, &#39;dataengineering&#39
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<details>
-<summary>Removing the warning</summary>
-To remove the vector mis-alignment, you'd have to train the pipeline by passing the pre-trained tok2vec component from the pre-trained model. In our case it's not a problem since the vectors are probably very similar, but nonetheless, I'll try to update the post when I can with the solution to this warning.
-</details>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>From this point we can store and reuse the pipeline at will !</p>
+<p>À partir de là, il est possible de sauver la pipeline sur le disque et de la réutiliser à volonté, ou encore de l'enrichir avec d'autres composants personalisés (pourquoi pas un second classifier, ou encore un modèle de NER complémentaire de celui présent dans la pipeline) avec l'ensemble des fonctionalités.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion"> </a></h2><p>We've seen in this tutorial how to train and integrate a text classification component to a pre-trained pipeline, in a fully programmatic way.</p>
-<p>Hope you liked the post and feel free to contact me if you want more details in the comments !</p>
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion"> </a></h2><p>Dans ce tutoriel, nous avons vu comment entraîner et intégrer un composant de classification de textes à une pipeline pré-existante, d'une manière complètement programmatique.
+La grande valeur ajoutée de cette procédure est qu'elle peut être complètement automatisée et permettre d'entraîner / assembler un grand nombre de composants de manière modulaire et automatique (par exemple en CI/CD)</p>
+<p>J'espère que le post vous auta été utile et n'hésitez pas à me contacter si vous voulez plus de détails dans les commentaires !</p>
 
 </div>
 </div>
@@ -867,7 +872,7 @@ To remove the vector mis-alignment, you'd have to train the pipeline by passing 
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/til/fr/python/nlp/spacy/mlops/2022/02/01/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" hidden></a>
+</script><a class="u-url" href="/til/fr/python/nlp/spacy/ml/mlops/2022/02/09/Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.html" hidden></a>
 </article>
 
       </div>
