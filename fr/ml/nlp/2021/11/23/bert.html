@@ -10,15 +10,15 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?" />
 <meta property="og:description" content="Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?" />
-<link rel="canonical" href="https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html" />
-<meta property="og:url" content="https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html" />
+<link rel="canonical" href="https://ycouble.github.io/til/fr/ml/nlp/2021/11/23/bert.html" />
+<meta property="og:url" content="https://ycouble.github.io/til/fr/ml/nlp/2021/11/23/bert.html" />
 <meta property="og:site_name" content="yco-til" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-11-23T00:00:00-06:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="La Famille BERT et les Transformers" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-11-23T00:00:00-06:00","datePublished":"2021-11-23T00:00:00-06:00","description":"Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?","headline":"La Famille BERT et les Transformers","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html"},"url":"https://ycouble.github.io/til/fr/nlp/2021/11/23/bert.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-11-23T00:00:00-06:00","datePublished":"2021-11-23T00:00:00-06:00","description":"Qu’est-ce que BERT ? Quel lien avec les transformers ? Pourquoi les utilise-t-on ? Comment ?","headline":"La Famille BERT et les Transformers","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/fr/ml/nlp/2021/11/23/bert.html"},"url":"https://ycouble.github.io/til/fr/ml/nlp/2021/11/23/bert.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="yco-til" /><link rel="shortcut icon" type="image/x-icon" href="/til/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -79,7 +79,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      10 min read
+      9 min read
     
 </span></p>
 
@@ -87,6 +87,9 @@ window.onload = wrap_img;
       <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
       
         <a class="category-tags-link" href="/til/categories/#fr">fr</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/til/categories/#ml">ml</a>
         &nbsp;
       
         <a class="category-tags-link" href="/til/categories/#nlp">nlp</a>
@@ -132,9 +135,9 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Une-petite-r&#233;volution">Une petite r&#233;volution<a class="anchor-link" href="#Une-petite-r&#233;volution"> </a></h2><p>Ces dernières années, la recherche en Intelligence Artificielle a été complètement transformée par une avancée technologique: les transformers.
-Avant de comprendre comment et pourquoi cette transformation s'est opérée, prenons un instant pour examiné comment la recherche en IA évalue une avancée technique.</p>
+Avant de comprendre comment et pourquoi cette transformation s'est opérée, prenons un instant pour examiner comment la recherche en IA évalue une avancée technique.</p>
 <p>La recherche en IA se concentre depuis plusieurs années sur les tâches dites difficiles de la compréhension du monde: l'extraction d'informations à partir de textes (discipline du traitement automatique du langage ou Natural Language Processing, NLP en anglais) ou d'image (Vision par ordinateur ou Computer Vision, CV) et plus récemment également sur l'audio.
-Chacune de ces discipline a déterminé un certain nombres de tâches d'extraction d'information que l'on cherche à faire effectuer à un programme, comme par exemple :</p>
+Chacune de ces discipline a déterminé un certain nombre de tâches d'extraction d'information que l'on cherche à faire effectuer à un programme, comme par exemple :</p>
 <ul>
 <li><strong>La détection d'objets</strong> (localiser une personne dans une image), <strong>la segmentation d'image</strong> (identifier la portion de l'image représentant une route), <strong>la classification d'images</strong> (dire si il s'agit d'une photo de lave-linge ou d'un frigo) en vision par ordinateur</li>
 <li><strong>La classification de texte</strong> (dire si un texte est positif ou négatif), <strong>l'extraction d'entités nommées</strong> d'un texte (identifier les noms de personnes, d'organisation, de pays etc.), <strong>le résumé de texte</strong> ou <strong>la réponse aux questions</strong> sur un texte dans le domaine du traitement du langage naturel.
@@ -151,9 +154,11 @@ C'est dans ce contexte que les Transformers ont apporté une petite révolution:
 <h2 id="Pourquoi-les-Transformers-et-BERT-fonctionnent-si-bien-?">Pourquoi les Transformers et BERT fonctionnent si bien ?<a class="anchor-link" href="#Pourquoi-les-Transformers-et-BERT-fonctionnent-si-bien-?"> </a></h2><p>La contribution du papier de BERT a été dans un premier temps de combiner avec succès plusieurs techniques déjà connues:</p>
 <ol>
 <li>Les Transformers, une architecture de Deep Learning qui avait déjà fait ses preuves. Cette architecture est basée sur le mécanisme d'attention, qui permet de prendre en compte tout le contexte d'un mot en accordant à priori autant d'importance à des mots éloignés qu'à des mots proches, contrairement aux modèles récurrents qui faisaient l'état de l'art avant l'arrivée des Transformers, en 2016 (cf. <em>Attention is All You Need</em>, Google 2016 dans les références.)</li>
-<li>Le Transfer Learning, qui consiste à entraîner un modèle sur une tâche très générique (souvent non supervisée) sur un dataset gigantesque (par exemple le corpus de Wikipedia), puis a spécialiser le modèle en le modifiant sur une seconde tâche différente de manière supervisée et sur un dataset plus réduit.</li>
 </ol>
 <p><img src="/til/images/copied_from_nb/bert/attention.png" alt="attention" title="Mécanisme d&#39;attention" /></p>
+<ol>
+<li>Le Transfer Learning, qui consiste à entraîner un modèle sur une tâche très générique (souvent non supervisée) sur un dataset gigantesque (par exemple le corpus de Wikipedia), puis a spécialiser le modèle en le modifiant sur une seconde tâche différente de manière supervisée et sur un dataset plus réduit.</li>
+</ol>
 <p>De plus, leur contribution est aussi et surtout dans la méthodologie de pré-entrainement du modèle de langage (le premier modèle), qui se fait en combinant deux tâches génériques non supervisées:</p>
 <ol>
 <li>La complétion de phrases à trou, c'est à dire trouver le meilleur mot pour compléter une phrase du type: "je suis allé au <em>__</em> ce matin pour acheter mes légumes".</li>
@@ -260,29 +265,6 @@ L'avantage de Hugging Face est la grande diversité de modèles expérimentaux o
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-<span class="ansi-red-fg">ERROR: pip&#39;s dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-spacy-transformers 1.1.2 requires transformers&lt;4.12.0,&gt;=3.4.0, but you have transformers 4.16.2 which is incompatible.
-fr-core-news-md 3.1.0 requires spacy&lt;3.2.0,&gt;=3.1.0, but you have spacy 3.2.1 which is incompatible.</span>
-<span class="ansi-yellow-fg">WARNING: You are using pip version 21.1.1; however, version 22.0.3 is available.
-You should consider upgrading via the &#39;/Users/yco/.pyenv/versions/proto-38dev/bin/python -m pip install --upgrade pip&#39; command.</span>
-Note: you may need to restart the kernel to use updated packages.
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -458,9 +440,6 @@ Cela dit, le problème difficile de la compréhension du monde est loin d'être 
 <h3 id="Exemples">Exemples<a class="anchor-link" href="#Exemples"> </a></h3><ul>
 <li>Exemple de configuration sur le hub de huggingface: <a href="https://huggingface.co/dslim/bert-base-NER/blob/main/config.json">https://huggingface.co/dslim/bert-base-NER/blob/main/config.json</a></li>
 <li>Transformers pour le NER FR <a href="https://huggingface.co/models?language=fr&amp;pipeline_tag=token-classification&amp;sort=downloads&amp;search=ner">https://huggingface.co/models?language=fr&amp;pipeline_tag=token-classification&amp;sort=downloads&amp;search=ner</a></li>
-<li>Facebook Language AI Research NER: <a href="https://huggingface.co/flair/ner-french">https://huggingface.co/flair/ner-french</a> (Org, Per, Loc, Names)</li>
-<li><a href="https://towardsdatascience.com/easy-fine-tuning-of-transformers-for-named-entity-recognition-d72f2b5340e3">https://towardsdatascience.com/easy-fine-tuning-of-transformers-for-named-entity-recognition-d72f2b5340e3</a></li>
-<li><a href="https://skimai.com/how-to-fine-tune-bert-for-named-entity-recognition-ner/">https://skimai.com/how-to-fine-tune-bert-for-named-entity-recognition-ner/</a></li>
 <li>Use huggingface transformers within spacy: <a href="https://reposhub.com/python/deep-learning/explosion-spacy-transformers.html">https://reposhub.com/python/deep-learning/explosion-spacy-transformers.html</a></li>
 </ul>
 <h3 id="Cours-et-ressources-formatrices">Cours et ressources formatrices<a class="anchor-link" href="#Cours-et-ressources-formatrices"> </a></h3><ul>
@@ -485,7 +464,7 @@ Cela dit, le problème difficile de la compréhension du monde est loin d'être 
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/til/fr/nlp/2021/11/23/bert.html" hidden></a>
+</script><a class="u-url" href="/til/fr/ml/nlp/2021/11/23/bert.html" hidden></a>
 </article>
 
       </div>
