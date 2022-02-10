@@ -248,8 +248,8 @@
 
   
       ,"page1": {
-          "title": "About Me",
-          "content": "This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
+          "title": "Yoann Couble",
+          "content": "Data scientist expérimenté, mes centres d’intérêts sont le NLP (modèles de langues, extraction de connaissance, NLU, NLI, NLG), l’explicabilité et l’équité du Machine Learning mais surtout l’opérationalisation de ces techniques. Vous pouvez en savoir plus sur moi sur les différents réseaux sociaux présentés en footer. . . Experienced data scientist, my interest is now on Natural Language Processing (laguage models, knowledge extraction, NLU, NLI, NLG), explainability and fairness in Maching Learning, but most of all the productionalization of these techniques. You can find me on my social links below. .",
           "url": "https://ycouble.github.io/til/about/",
           "relUrl": "/about/",
           "date": ""
