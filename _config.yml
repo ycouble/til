@@ -39,9 +39,12 @@ baseurl: "/til" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: ycouble
+    # twitter: ycouble
+    linkedin: jekyll
     github: ycouble
-    gitlab: ycouble
+    gitlab:
+     - username: ycouble
+       instance: gitlab.com
 
 # Set this to true to get LaTeX math equation support
 use_math: 
