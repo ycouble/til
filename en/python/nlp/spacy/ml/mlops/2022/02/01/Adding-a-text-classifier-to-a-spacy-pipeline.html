@@ -783,18 +783,22 @@ classification {}
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Integrate-the-new-component-to-an-existing-pipeline">Integrate the new component to an existing pipeline<a class="anchor-link" href="#Integrate-the-new-component-to-an-existing-pipeline"> </a></h2><p>There are actually several ways to do this:</p>
 <ol>
-<li>Creating a pipe and loading the model from files, but this would require a different training process than what we did (on a model level and not pipeline level)<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
+<li>Creating a pipe and loading the model from files, but this would require a different training process than what we did (on a model level and not pipeline level)</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
 <span class="n">pipe</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;path/to/model/files&quot;</span><span class="p">)</span> <span class="c1"># Note, requires a different folder structure that what we&#39;ve generated</span>
 </pre></div>
-</li>
-<li>Loading the pipeline, saving the model to disk/bytes and loading it back again from disk/bytes in a new pipe in the pretrained pipeline<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+<ol>
+<li>Loading the pipeline, saving the model to disk/bytes and loading it back again from disk/bytes in a new pipe in the pretrained pipeline</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="c1"># OR</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span>
- <span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
+    <span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
-</li>
+<ol>
 <li>Creating the pipe with a source pipeline.</li>
 </ol>
 
