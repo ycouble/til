@@ -791,18 +791,22 @@ classification {}
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Int&#233;gration-du-nouveaux-composant-dans-la-pipeline-existante">Int&#233;gration du nouveaux composant dans la pipeline existante<a class="anchor-link" href="#Int&#233;gration-du-nouveaux-composant-dans-la-pipeline-existante"> </a></h2><p>Il y a en fait plusieurs manière de le faire :</p>
 <ol>
-<li>Créer un pipe et charger le modèle à partir du système de fichiers, mais cela aurait demandé d'utiliser un processus d'entraînement différent de celui que nous avons utilisé ici.<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
+<li>Créer un pipe et charger le modèle à partir du système de fichiers, mais cela aurait demandé d'utiliser un processus d'entraînement différent de celui que nous avons utilisé ici.</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span>
 <span class="n">pipe</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;path/to/model/files&quot;</span><span class="p">)</span> <span class="c1"># Note, requires a different folder structure that what we&#39;ve generated</span>
 </pre></div>
-</li>
-<li>Charger la pipeline, sauver le modèle du composant dans un fichier ou sous forme binaire, et le charger à nouveau dans un second temps depuis le disque / le binaire dans un nouveau pipe ajouté à la pipeline pré-entraînée.<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+<ol>
+<li>Charger la pipeline, sauver le modèle du composant dans un fichier ou sous forme binaire, et le charger à nouveau dans un second temps depuis le disque / le binaire dans un nouveau pipe ajouté à la pipeline pré-entraînée.</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_disk</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 <span class="c1"># OR</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span>
- <span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
+    <span class="n">trained_nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s2">&quot;textcat&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
-</li>
+<ol>
 <li>Créer le pipe depuis une pipeline source.</li>
 </ol>
 
