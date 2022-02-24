@@ -160,7 +160,7 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Spacy est une bibliothèque de Traitement Automatique du Langage Naturel (TANL ou NLP en anglais) et un framework pour industrialiser des applications de NLP et de Machine Learning.</p>
 <p>Les ressources pour entraîner un modèle de machine learning sur du texte (classification, extraction d'entités, etc.) avec SpaCy ne manquent pas, mais très peu vont jusqu'au bout du chemin: l'intégration avec d'autres composants standards et pré-entraînés de SpaCy (ou d'autres fournisseurs), tels qu'un DependencyParser, tagger POS qui ne nécessitent pas de spécialisation ou de fine tuning.</p>
-<p>C'est pour combler ce manque que <a href="https://github.com/ycouble/til/blob/master/_notebooks/2022-02-09-Entrainement-et-intégration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb">ce notebook</a> existe : <strong>vous guider dans le process de configuration d'un composant de classification de textes, de l'entraînement depuis un script python et jusqu'à son intégration dans une pipeline SpaCy pré-entraînée afin qu'elle soit réutilisable depuis le reste de vos applications.</strong>.</p>
+<p>C'est pour combler ce manque que <a href="https://github.com/ycouble/til/blob/master/_notebooks/2022-02-09-Entrainement-et-integration-d-un-classifieur-de-textes-a-une-pipeline-spacy.ipynb">ce notebook</a> existe : <strong>vous guider dans le process de configuration d'un composant de classification de textes, de l'entraînement depuis un script python et jusqu'à son intégration dans une pipeline SpaCy pré-entraînée afin qu'elle soit réutilisable depuis le reste de vos applications.</strong>.</p>
 
 </div>
 </div>
@@ -492,7 +492,7 @@ Créons maintenant les datasets d'entraînement et de validation en y incluant l
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Le workflow recommandé avec SpaCy utilise des fichiers de configuration. Ils permettent de configurer chaque composant de la pipeline, de choisir quels composant entrâiner etc.</p>
-<p>Nous utiliserons <a href="[spacy_textcat/config.cfg](https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/config.cfg">ce fichier de configuration</a>), qui utilises le classifieur de textes par défaut de SpaCy.
+<p>Nous utiliserons <a href="https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/config.cfg">ce fichier de configuration</a>, qui utilises le classifieur de textes par défaut de SpaCy.
 La configuration peut être re-générée en suivant ce guide : <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> et nous l'avons customisé pour qu'il utilise ce model proposé par SpaCy également : <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
 <p>Il y a deux parties qu'il est important de noter dans ce fichier :</p>
 <ol>
