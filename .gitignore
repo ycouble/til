@@ -13,3 +13,5 @@ _notebooks/.ipynb_checkpoints
 .tweet-cache
 __pycache__
 workspace.code-workspace
+
+.DS_STORE
