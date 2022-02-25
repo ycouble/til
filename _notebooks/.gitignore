@@ -1,2 +1,4 @@
 *.spacy
 output/
+model-best
+/reddit_data.csv
