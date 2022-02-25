@@ -6,12 +6,12 @@
 {%- if site.show_description and post.description  -%}
 <p class="post-meta-description">{{ post.description }}</p>
 {%- endif -%}
-<p class="post-meta">{{ post.date | date: date_format }}</p>
-{% if page.categories.size > 0 and site.show_tags %}
+{% if post.categories.size > 0 and site.show_tags %}
 <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
-{% for category in  page.categories  %}
+{% for category in  post.categories  %}
   <a class="category-tags-link" href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
   {% unless forloop.last %}&nbsp;{% endunless %}
 {% endfor %}
 </p>
 {% endif %}
+<p class="post-meta">{{ post.date | date: date_format }}</p>
