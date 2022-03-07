@@ -160,7 +160,7 @@ window.onload = wrap_img;
         
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Explainabili...what-?">Explainabili...what ?<a class="anchor-link" href="#Explainabili...what-?"> </a></h2><p>One of the most important downsides to Deep Learning is the apparent loss of interpretaility that it introduces.
+<h2 id="Explainabili...what-?">Explainabili...what ?<a class="anchor-link" href="#Explainabili...what-?"> </a></h2><p>One of the most important downsides to Deep Learning is the apparent loss of interpretability that it introduces.
 As a matter of facts, Deep Learning models are no longer deterministic nor simple enough to be interpreted through their internal states. 
 Models now have trillions of parameters with little to no sense at all.</p>
 <p>On of the recent trends to tackle this issue is to use explainability techniques, such as LIME and SHAP which can both be applied to any type of ML model.
@@ -170,7 +170,7 @@ One popular and helpful way to explain a prediction from a model is to highlight
 <li><a href="https://github.com/marcotcr/lime">LIME</a> is an explainability technique that uses what we call a local surrogate model - i.e. a second model that locally approximates the model to explain - and infers explainability metrics from the second model. 
 LIME is quite popular and very often used, even though the surrogate nature of the technique is often criticized (there is no guarantee that the surrogate model approximates well the actual model).</li>
 <li><a href="https://shap.readthedocs.io/en/latest/">SHAP</a> is based on Shapeley Values, a game-theoretic concept that tests all possible combinations of features in order to determine the marginal contributions of each one.
-SHAP has more theoretical gaurantees and good properties, hence it is often considered more reliable than LIME, even though it is more time consuming.</li>
+SHAP has more theoretical guarantees and good properties, hence it is often considered more reliable than LIME, even though it is more time consuming.</li>
 </ul>
 <p>More details can be found on both techniques in <a href="https://medium.com/@kalia_65609/interpreting-an-nlp-model-with-lime-and-shap-834ccfa124e4">this post</a> or in <a href="https://christophm.github.io/interpretable-ml-book/">this excellent book from Christopher Molnar</a>.</p>
 <p>In this article we'll show how to use SHAP on textual inputs, and more specifically for the popular open source NLP library <a href="https://spacy.io/">SpaCy</a>.</p>
@@ -184,8 +184,8 @@ SHAP has more theoretical gaurantees and good properties, hence it is often cons
 It contains (but is not limited to) using machine learning models to analyse texts.</p>
 <p>Unlike tabular data, where each feature can be represented by a number and can therefore be given directly to a model, text data need to be pre-processed before being provided to a ML model.
 This pre-processing text, called tokenization, basically consists of converting each word<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> (token) into a number.
-For that the tokenizer requires a dictionnary which will list all word to number matches.
-This dictionnary is called a vocabulary.</p>
+For that the tokenizer requires a dictionary which will list all word to number matches.
+This dictionary is called a vocabulary.</p>
 <p>For example if my whole corpus is the following list of documents: <code>["I am Yoann Couble", "I work for PALO-IT", "I work with NLP for companies"]</code>, the vocabulary would be :</p>
 <div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;I&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -201,11 +201,11 @@ This dictionnary is called a vocabulary.</p>
 <span class="p">}</span>
 </pre></div>
 <p>Therefore, tokenizing the last sentence would result in this vector : <code>[1, 5, 8, 9, 6, 10]</code>.</p>
-<p>The tokenizer is important to use explainability techniques, since these techniques often resort to twisting the inputs to observe the effects on the ouputs.
+<p>The tokenizer is important to use explainability techniques, since these techniques often resort to twisting the inputs to observe the effects on the outputs.
 On text, varying the token integer representation would have no meaning at all.
 So instead, the explainer removes tokens from the input and observes the impact on the output of the model.
 With SHAP, the <a href="https://shap.readthedocs.io/en/latest/generated/shap.explainers.Permutation.html">permutation explainer</a> does exactly that and in a way that enables to approximate shapeley values of each feature.</p>
-<p>As an example, permuttation would mean passing "I ... with NLP for ...", "... work with ... for companies", etc. to the model and see by how much the result of the model changes.</p>
+<p>As an example, permutation would mean passing "I ... with NLP for ...", "... work with ... for companies", etc. to the model and see by how much the result of the model changes.</p>
 <div class="footnotes">
 <hr />
 <ol><li id="fn-1"><p>Some tokenization algorithms are however even more fine grained than that and split words into sub-words, phonemes, syllables to allow for more robust or versatile language representation.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
@@ -217,11 +217,11 @@ With SHAP, the <a href="https://shap.readthedocs.io/en/latest/generated/shap.exp
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Explainig-the-results-of-a-SpaCy-text-classification-model">Explainig the results of a SpaCy text classification model<a class="anchor-link" href="#Explainig-the-results-of-a-SpaCy-text-classification-model"> </a></h2><p>Now let's see in practice how to use SHAP to get some insights on a model trained with SpaCy (see <a href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html">this article on how to do so</a>).
+<h2 id="Explaining-the-results-of-a-SpaCy-text-classification-model">Explaining the results of a SpaCy text classification model<a class="anchor-link" href="#Explaining-the-results-of-a-SpaCy-text-classification-model"> </a></h2><p>Now let's see in practice how to use SHAP to get some insights on a model trained with SpaCy (see <a href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html">this article on how to do so</a>).
 In this article we're going to use text classification as an example, and a custom pipeline specialized for this.
 You can find the pipeline <a href="https://github.com/ycouble/til/blob/master/_notebooks/explain_nlp/model-best.zip">here</a> (you'll need to unzip it) and the dataset <a href="https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/reddit_data.csv">there</a>.</p>
 <h3 id="SpaCy-wrappers-for-SHAP">SpaCy wrappers for SHAP<a class="anchor-link" href="#SpaCy-wrappers-for-SHAP"> </a></h3><p>SHAP supports text data, but has little to no support for SpaCy models natively, so we'll need to create some wrappers and assemble precisely the different parts required by SHAP.</p>
-<p>The permuttation explainer, which is the one preferred by SHAP for text data, requires several parameters:</p>
+<p>The permutation explainer, which is the one preferred by SHAP for text data, requires several parameters:</p>
 <ul>
 <li>a prediction function, which takes a list of texts and returns a list of results (in the case of a text classifier, this means the classes and their corresponding probability)</li>
 <li>a tokenizer to build a Text masker for SHAP.</li>
@@ -323,8 +323,8 @@ Let's write some wrappers around the pipeline to conform to shap expectations.</
 <span class="c1"># Create the Shap Explainer</span>
 <span class="c1"># - predict is the &quot;model&quot; function, adapted to a transformers-like model</span>
 <span class="c1"># - masker is the masker used by shap, which relies on a transformers-like tokenizer</span>
-<span class="c1"># - algorithm is set to permuation, which is the one used for transformers models</span>
-<span class="c1"># - output_names are the classes (altough it is not propagated to the permutation explainer currently, which is why plots do not have the labels)</span>
+<span class="c1"># - algorithm is set to permutation, which is the one used for transformers models</span>
+<span class="c1"># - output_names are the classes (although it is not propagated to the permutation explainer currently, which is why plots do not have the labels)</span>
 <span class="c1"># - max_evals is set to a high number to reduce the probability of cases where the explainer fails because there are too many tokens</span>
 <span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="o">.</span><span class="n">Explainer</span><span class="p">(</span>
     <span class="n">predict</span><span class="p">,</span>
@@ -418,7 +418,7 @@ Let's write some wrappers around the pipeline to conform to shap expectations.</
 <li>the <code>base_value</code> (which can be seen as a prior: what we would get for a empty string)</li>
 <li>the <code>data</code>: the words as they are tokenized</li>
 </ul>
-<p>From this structure we can generate plots to help vizualize the explanation.</p>
+<p>From this structure we can generate plots to help visualize the explanation.</p>
 
 </div>
 </div>
