@@ -1,1 +1,1 @@
-Sitemap: couble.eu/til/sitemap.xml
+Sitemap: https://ycouble.github.io/til/sitemap.xml
