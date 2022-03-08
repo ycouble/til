@@ -172,7 +172,7 @@ C'est dans ce contexte que les Transformers ont apporté une petite révolution:
 <ol>
 <li>Les Transformers, une architecture de Deep Learning qui avait déjà fait ses preuves. Cette architecture est basée sur le mécanisme d'attention, qui permet de prendre en compte tout le contexte d'un mot en accordant à priori autant d'importance à des mots éloignés qu'à des mots proches, contrairement aux modèles récurrents qui faisaient l'état de l'art avant l'arrivée des Transformers, en 2016 (cf. <em>Attention is All You Need</em>, Google 2016 dans les références.)</li>
 </ol>
-<p><img src="/til/images/copied_from_nb/bert/attention.png" alt="attention" title="Mécanisme d&#39;attention" /></p>
+<p><img src="/images/copied_from_nb/bert/attention.png" alt="attention" title="Mécanisme d&#39;attention" /></p>
 <ol>
 <li>Le Transfer Learning, qui consiste à entraîner un modèle sur une tâche très générique (souvent non supervisée) sur un dataset gigantesque (par exemple le corpus de Wikipédia), puis à spécialiser le modèle en le modifiant sur une seconde tâche différente de manière supervisée et sur un dataset plus réduit.</li>
 </ol>
@@ -185,7 +185,7 @@ C'est dans ce contexte que les Transformers ont apporté une petite révolution:
 <h3 id="Qu'est-ce-que-&#231;a-change-?">Qu'est-ce que &#231;a change ?<a class="anchor-link" href="#Qu'est-ce-que-&#231;a-change-?"> </a></h3><p>Le gros changement apporté par BERT est cette idée de modèle de langage: la plupart des tâches de NLP ont en commun d'essayer de comprendre le contexte d'un mot et de trouver les relations entre les mots d'une phrase, et c'est ce que tente d'apporter le modèle de langage. Concrètement, cela signifie que pour n'importe quelle tâche de NLP, il suffit maintenant de réutiliser le modèle de langage pour avoir cette compréhension générale, puis de spécialiser la "tête" de l'architecture pour une tâche donnée.</p>
 <p>La seconde conséquence est d'ordre pratique: avec un modèle comme BERT, l'entraînement d'un modèle sur une tâche spécifique se résume généralement à n'entraîner que la tête de l'architecture, donc à un coût dérisoire par rapport à un modèle complet comme précédemment.</p>
 <p>Maintenant, il est devenu extrêmement facile d'utiliser et d'entraîner un modèle très performant pour toute une diversité de tâches de NLP. Cela a été grandement facilité par la publication du code et des modèles pré-entraînés, et par l'arrivée de Hugging Face, une entreprise de l'open source fondée par deux français qui propose une interface standard et un hub de modèles pour les transformers.</p>
-<p><img src="/til/images/copied_from_nb/bert/bert_training.png" alt="bert" /></p>
+<p><img src="/images/copied_from_nb/bert/bert_training.png" alt="bert" /></p>
 
 </div>
 </div>
