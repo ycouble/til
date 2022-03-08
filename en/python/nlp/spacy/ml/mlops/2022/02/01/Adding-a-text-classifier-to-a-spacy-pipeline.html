@@ -4,21 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Training and integrating a custom text classifier to a spacy pipeline | TIL</title>
+<title>Training and integrating a custom text classifier to a spaCy pipeline | TIL</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
+<meta property="og:title" content="Training and integrating a custom text classifier to a spaCy pipeline" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Customize Spacy pipelines with your custom components" />
-<meta property="og:description" content="Customize Spacy pipelines with your custom components" />
+<meta name="description" content="Customize spaCy pipelines with your custom components" />
+<meta property="og:description" content="Customize spaCy pipelines with your custom components" />
 <link rel="canonical" href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
 <meta property="og:url" content="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html" />
 <meta property="og:site_name" content="TIL" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-02-01T00:00:00-06:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Training and integrating a custom text classifier to a spacy pipeline" />
+<meta property="twitter:title" content="Training and integrating a custom text classifier to a spaCy pipeline" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","description":"Customize Spacy pipelines with your custom components","headline":"Training and integrating a custom text classifier to a spacy pipeline","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"},"url":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-01T00:00:00-06:00","datePublished":"2022-02-01T00:00:00-06:00","description":"Customize spaCy pipelines with your custom components","headline":"Training and integrating a custom text classifier to a spaCy pipeline","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"},"url":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="TIL" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -88,13 +88,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Training and integrating a custom text classifier to a spacy pipeline</h1><p class="page-description">Customize Spacy pipelines with your custom components</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Training and integrating a custom text classifier to a spaCy pipeline</h1><p class="page-description">Customize spaCy pipelines with your custom components</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-01T00:00:00-06:00" itemprop="datePublished">
         Feb 1, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      12 min read
+      9 min read
     
 </span></p>
 
@@ -110,7 +110,7 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/til/categories/#nlp">nlp</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/til/categories/#spacy">spacy</a>
+        <a class="category-tags-link" href="/til/categories/#spaCy">spaCy</a>
         &nbsp;
       
         <a class="category-tags-link" href="/til/categories/#ml">ml</a>
@@ -158,8 +158,8 @@ window.onload = wrap_img;
         
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>Spacy is a Natural Language Processing (NLP) library and framework to productionalize Machine Learning and NLP applications.</p>
-<p>There are loads of resources on training a Spacy component such as a NER, text classification or other basic NLP components, but I couldn't find one that finished the work well, i.e. where you'd end up with a full-fledged pre-trained model for common components such as Dependency Parsing, POS tagging or NER <strong>and</strong> a custom component to predict a specific task.</p>
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction"> </a></h2><p>spaCy is a Natural Language Processing (NLP) library and framework to productionalize Machine Learning and NLP applications.</p>
+<p>There are loads of resources on training a spaCy component such as a NER, text classification or other basic NLP components, but I couldn't find one that finished the work well, i.e. where you'd end up with a full-fledged pre-trained model for common components such as Dependency Parsing, POS tagging or NER <strong>and</strong> a custom component to predict a specific task.</p>
 <p>This is what <a href="https://github.com/ycouble/til/blob/master/_notebooks/2022-02-01-Adding-a-text-classifier-to-a-spacy-pipeline.ipynb">this notebook</a> / post is here to do: <strong>guide you through the whole process of configuring a text classification component, training it from python and integrating it into a fully featured pre-trained model, to be reused from anywhere else</strong>.</p>
 
 </div>
@@ -247,7 +247,7 @@ window.onload = wrap_img;
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_colwidth</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;spacy_textcat/reddit_data.csv&quot;</span><span class="p">)</span>
 <span class="n">data</span>
 </pre></div>
@@ -296,39 +296,11 @@ window.onload = wrap_img;
       <td>s0vufk</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>I'm making an ESG stock analysis program in Java, and so far the only free ESG API I've come across is ESGEnterprise, but I'm having trouble retrieving the data. Has anyone had any success/have any recs for other ESG APIs out there.</td>
-      <td>API</td>
-      <td>datasets</td>
-      <td>ruvj9n</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Hey everyone! I’m one of the creators of Sieve _URL_ and I’m excited to be sharing it!\nSieve _URL_ **is an API that helps you turn petabyte-scale video data into a high-quality dataset, automatically.**\nIt helps store, process, and semantically search your video data. Just think _NUMBER_ cameras recording footage at _NUMBER_ FPS, _NUMBER_/_NUMBER_. That would be _NUMBER_ million frames generated in a single day. The videos might be searchable by timestamp, but finding moments of interest is like searching for a needle in a haystack. Sieve tags useful attributes like people, motion, lighting, etc on every frame!\nWe built this visual demo (link here _URL_ a little while back which we’d love to get feedback on. It’s \~_NUMBER_ hours of security footage that our API processed in &lt;_NUMBER_ mins and has simple querying and export functionality enabled. We see applications in better understanding what data you have, figuring out which data to send to labeling, sampling datasets for training, and building multiple test sets for models by scenario.\nTo try it on your videos: _URL_ _URL_\nVisual dashboard walkthrough: Click on our site link!</td>
-      <td>API</td>
-      <td>datasets</td>
-      <td>rup1uj</td>
-    </tr>
-    <tr>
       <th>...</th>
       <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
-    </tr>
-    <tr>
-      <th>718</th>
-      <td>I'm currently in the process of learning NLP. I am using catalyst on c#. \nI was able to run the sample programs and it was able to determine if the word is an noun, adjective, etc. But I can't find any sample for what I need.\nHere is a summary of what I would like to achieve. \nI would like to extract certain information on a sentence. Lets say i have the following texts:\n"Sally ate an orange this morning. "\nOr \n"Sally is hiding behind the cabinet and she is eating an orange. " \nHow do i use the nlp to extract what sally ate?</td>
-      <td>NaN</td>
-      <td>LanguageTechnology</td>
-      <td>saas64</td>
-    </tr>
-    <tr>
-      <th>719</th>
-      <td>I’ve been trying to do some basic keyword extraction and finding it harder than expected.\nKeyBERT seems good but it requires a powerful GPU to be usably fast. That’s possible with AWS, but there’s a bit more set up.\nI just tried PyTextRank, and I was surprised at the quality of the output - I wouldn’t say it was perfect either. Maybe I should set a threshold, like choose the top _NUMBER_ ranked keywords? It’s fine if we exclude potential good keywords just to have a smaller list of good ones.\nHere’s a good article about _NUMBER_ different methods, which is helpful -\n_URL_\nIn theory, Spacy and BERT seem like the best options but they’re both a little complex. \nI think KW extraction really only needs a few layers or as Spacy would call them pipelines.\n_NUMBER_. accurate tokenization of words and punctuation symbols\n_NUMBER_. accurate recognition of multi-word expressions  - think of it as “chunking”\n_NUMBER_. Strong assessment of keyword “candidacy” for each MWE \nOf course, a good algorithm can often skip steps. Like BERT is so smart it doesn’t need anything but the input text.\nDoes anyone know of a simplest way to run a fast, effective keyword extraction?\nI’m talking _NUMBER_ keywords in one second on a fast CPU.\nThanks very much</td>
-      <td>NaN</td>
-      <td>LanguageTechnology</td>
-      <td>s7qml8</td>
     </tr>
     <tr>
       <th>720</th>
@@ -387,7 +359,7 @@ window.onload = wrap_img;
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The dataset is composed of ~700 cleaned texts along with the subredddit they've been extracted from on Reddit. Let's now create the Spacy training / validation data by annotating spacy docs created from the texts.</p>
+<p>The dataset is composed of ~700 cleaned texts along with the subredddit they've been extracted from on Reddit. Let's now create the spaCy training / validation data by annotating spaCy docs created from the texts.</p>
 
 </div>
 </div>
@@ -488,11 +460,11 @@ window.onload = wrap_img;
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The recommended training workflow with SpaCy uses config files. They enable to configure each component of the model pipeline, set which components can be trained etc.</p>
-<p>We'll use <a href="https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/config.cfg">this configuration file</a>, which uses the default text classifier model from spacy. It was generated through this SpaCy tool: <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> and customized to use the default text classification model from: <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
+<p>The recommended training workflow with spaCy uses config files. They enable to configure each component of the model pipeline, set which components can be trained etc.</p>
+<p>We'll use <a href="https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/config.cfg">this configuration file</a>, which uses the default text classifier model from spaCy. It was generated through this spaCy tool: <a href="https://spacy.io/usage/training#quickstart">https://spacy.io/usage/training#quickstart</a> and customized to use the default text classification model from: <a href="https://spacy.io/api/architectures#TextCatBOW">https://spacy.io/api/architectures#TextCatBOW</a>.</p>
 <p>The important parts in the file are the following:</p>
 <ol>
-<li>The pipeline definition (under the <code>nlp</code> tag): The pipeline is composed only of a textcat component since it is the only one we have labelled data for and the only one we are going to train today. Also important to mention is the tokenizer component that we have left to the spacy default, but could be customized. This is the only component that we need to train our <code>textcat</code> component.</li>
+<li>The pipeline definition (under the <code>nlp</code> tag): The pipeline is composed only of a textcat component since it is the only one we have labelled data for and the only one we are going to train today. Also important to mention is the tokenizer component that we have left to the spaCy default, but could be customized. This is the only component that we need to train our <code>textcat</code> component.</li>
 </ol>
 <div class="highlight"><pre><span></span><span class="p">[</span><span class="kc">nl</span><span class="err">p</span><span class="p">]</span>
 <span class="err">la</span><span class="kc">n</span><span class="err">g</span> <span class="err">=</span> <span class="s2">&quot;en&quot;</span>
@@ -526,8 +498,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <details>
-  <summary>More details on SpaCy Pipelines</summary>
-The spacy pipeline is a modular and highly configurable workflow for processing texts. As shown below, there is a mandatory first step of tokenizing the text, then there are a succession of pipeline components (or pipes) that are executed in order, but do not necessarily rely on each other. It will be in the code of a component that the dependency would be set, e.g. by accessing previously set attributes in the doc element.
+  <summary>More details on spaCy Pipelines</summary>
+The spaCy pipeline is a modular and highly configurable workflow for processing texts. As shown below, there is a mandatory first step of tokenizing the text, then there are a succession of pipeline components (or pipes) that are executed in order, but do not necessarily rely on each other. It will be in the code of a component that the dependency would be set, e.g. by accessing previously set attributes in the doc element.
 <figure>
   
     <img class="docimage" src="/til/images/copied_from_nb/spacy_textcat/spacy_pipeline.png" alt="" />
@@ -547,9 +519,9 @@ The spacy pipeline is a modular and highly configurable workflow for processing 
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Unlike what can be found in most of the tutorials online or in the SpaCy docs where training is started from CLI, we're going to train the component from a config file and from a python script.
+<p>Unlike what can be found in most of the tutorials online or in the spaCy docs where training is started from CLI, we're going to train the component from a config file and from a python script.
 This has the advantage of letting us start the training programatically, e.g. from a data pipeline (using airflow, dagster or such).</p>
-<p>However, we'll use the spacy pre-built training function from <code>spacy.cli.train</code> in order to benefit from all the checks and logging that are set up in the CLI. (Another approach would be to reuse parts of the code, calling directly the <code>spacy.training</code> module instead)</p>
+<p>However, we'll use the spaCy pre-built training function from <code>spacy.cli.train</code> in order to benefit from all the checks and logging that are set up in the CLI. (Another approach would be to reuse parts of the code, calling directly the <code>spacy.training</code> module instead)</p>
 
 </div>
 </div>
@@ -632,9 +604,9 @@ output/spacy_textcat/model-last
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We now have a trained classification model !
-Spacy stores the model in folders, and usually saves both the best model and the last state of the model at the end of the training, in case we'd want to continue training from this step.
+spaCy stores the model in folders, and usually saves both the best model and the last state of the model at the end of the training, in case we'd want to continue training from this step.
 In the <code>meta.json</code> file in the model folder you can find the internal scores that were computed, and we can see that we have ~80% Macro F score and a nice .93 AUC.</p>
-<p>We can import the newly trained pipeline from spacy to predict like this:</p>
+<p>We can import the newly trained pipeline from spaCy to predict like this:</p>
 
 </div>
 </div>
