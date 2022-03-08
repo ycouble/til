@@ -4,12 +4,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Explaining Spacy Models with Shap | TIL</title>
+<title>Explaining spaCy Models with Shap | TIL</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Explaining Spacy Models with Shap" />
+<meta property="og:title" content="Explaining spaCy Models with Shap" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Using explainability to understand a NLP algorithm trained with Spacy" />
-<meta property="og:description" content="Using explainability to understand a NLP algorithm trained with Spacy" />
+<meta name="description" content="Using explainability to understand a NLP algorithm trained with spaCy" />
+<meta property="og:description" content="Using explainability to understand a NLP algorithm trained with spaCy" />
 <link rel="canonical" href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html" />
 <meta property="og:url" content="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html" />
 <meta property="og:site_name" content="TIL" />
@@ -18,9 +18,9 @@
 <meta property="article:published_time" content="2022-02-24T00:00:00-06:00" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta property="twitter:image" content="https://ycouble.github.io/til/images/explain_nlp_cover.png" />
-<meta property="twitter:title" content="Explaining Spacy Models with Shap" />
+<meta property="twitter:title" content="Explaining spaCy Models with Shap" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-24T00:00:00-06:00","datePublished":"2022-02-24T00:00:00-06:00","description":"Using explainability to understand a NLP algorithm trained with Spacy","headline":"Explaining Spacy Models with Shap","image":"https://ycouble.github.io/til/images/explain_nlp_cover.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html"},"url":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-02-24T00:00:00-06:00","datePublished":"2022-02-24T00:00:00-06:00","description":"Using explainability to understand a NLP algorithm trained with spaCy","headline":"Explaining spaCy Models with Shap","image":"https://ycouble.github.io/til/images/explain_nlp_cover.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html"},"url":"https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/24/Explaining_spacy_models_with_shap.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/til/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ycouble.github.io/til/feed.xml" title="TIL" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -90,7 +90,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Explaining Spacy Models with Shap</h1><p class="page-description">Using explainability to understand a NLP algorithm trained with Spacy</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-24T00:00:00-06:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Explaining spaCy Models with Shap</h1><p class="page-description">Using explainability to understand a NLP algorithm trained with spaCy</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-02-24T00:00:00-06:00" itemprop="datePublished">
         Feb 24, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -112,7 +112,7 @@ window.onload = wrap_img;
         <a class="category-tags-link" href="/til/categories/#nlp">nlp</a>
         &nbsp;
       
-        <a class="category-tags-link" href="/til/categories/#spacy">spacy</a>
+        <a class="category-tags-link" href="/til/categories/#spaCy">spaCy</a>
         &nbsp;
       
         <a class="category-tags-link" href="/til/categories/#ml">ml</a>
@@ -173,7 +173,7 @@ LIME is quite popular and very often used, even though the surrogate nature of t
 SHAP has more theoretical guarantees and good properties, hence it is often considered more reliable than LIME, even though it is more time consuming.</li>
 </ul>
 <p>More details can be found on both techniques in <a href="https://medium.com/@kalia_65609/interpreting-an-nlp-model-with-lime-and-shap-834ccfa124e4">this post</a> or in <a href="https://christophm.github.io/interpretable-ml-book/">this excellent book from Christopher Molnar</a>.</p>
-<p>In this article we'll show how to use SHAP on textual inputs, and more specifically for the popular open source NLP library <a href="https://spacy.io/">SpaCy</a>.</p>
+<p>In this article we'll show how to use SHAP on textual inputs, and more specifically for the popular open source NLP library <a href="https://spacy.io/">spaCy</a>.</p>
 
 </div>
 </div>
@@ -217,16 +217,16 @@ With SHAP, the <a href="https://shap.readthedocs.io/en/latest/generated/shap.exp
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Explaining-the-results-of-a-SpaCy-text-classification-model">Explaining the results of a SpaCy text classification model<a class="anchor-link" href="#Explaining-the-results-of-a-SpaCy-text-classification-model"> </a></h2><p>Now let's see in practice how to use SHAP to get some insights on a model trained with SpaCy (see <a href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html">this article on how to do so</a>).
+<h2 id="Explaining-the-results-of-a-spaCy-text-classification-model">Explaining the results of a spaCy text classification model<a class="anchor-link" href="#Explaining-the-results-of-a-spaCy-text-classification-model"> </a></h2><p>Now let's see in practice how to use SHAP to get some insights on a model trained with spaCy (see <a href="https://ycouble.github.io/til/en/python/nlp/spacy/ml/mlops/2022/02/01/Adding-a-text-classifier-to-a-spacy-pipeline.html">this article on how to do so</a>).
 In this article we're going to use text classification as an example, and a custom pipeline specialized for this.
 You can find the pipeline <a href="https://github.com/ycouble/til/blob/master/_notebooks/explain_nlp/model-best.zip">here</a> (you'll need to unzip it) and the dataset <a href="https://github.com/ycouble/til/blob/master/_notebooks/spacy_textcat/reddit_data.csv">there</a>.</p>
-<h3 id="SpaCy-wrappers-for-SHAP">SpaCy wrappers for SHAP<a class="anchor-link" href="#SpaCy-wrappers-for-SHAP"> </a></h3><p>SHAP supports text data, but has little to no support for SpaCy models natively, so we'll need to create some wrappers and assemble precisely the different parts required by SHAP.</p>
+<h3 id="spaCy-wrappers-for-SHAP">spaCy wrappers for SHAP<a class="anchor-link" href="#spaCy-wrappers-for-SHAP"> </a></h3><p>SHAP supports text data, but has little to no support for spaCy models natively, so we'll need to create some wrappers and assemble precisely the different parts required by SHAP.</p>
 <p>The permutation explainer, which is the one preferred by SHAP for text data, requires several parameters:</p>
 <ul>
 <li>a prediction function, which takes a list of texts and returns a list of results (in the case of a text classifier, this means the classes and their corresponding probability)</li>
 <li>a tokenizer to build a Text masker for SHAP.</li>
 </ul>
-<p>These features are present in SpaCy nlp pipelines but not as functions. They are embedded in the pipeline and produce results inside the document object.
+<p>These features are present in spaCy nlp pipelines but not as functions. They are embedded in the pipeline and produce results inside the document object.
 Let's write some wrappers around the pipeline to conform to shap expectations.</p>
 
 </div>
@@ -457,7 +457,7 @@ Let's write some wrappers around the pipeline to conform to shap expectations.</
 The point where red and blue meet is the value predicted by the model for this label.</li>
 <li>The second plot is the text with each word highlighted depending on its contribution to the final decision.</li>
 </ul>
-<p>That's it ! We've seen in this article how to adapt a SpaCy pipeline to be able to use shap for our NLP explanations.</p>
+<p>That's it ! We've seen in this article how to adapt a spaCy pipeline to be able to use shap for our NLP explanations.</p>
 
 </div>
 </div>
