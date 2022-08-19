@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Node JS | TIL</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Node JS" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Lecture notes on Node JS" />
+<meta property="og:description" content="Lecture notes on Node JS" />
+<link rel="canonical" href="https://til.couble.eu/web/2022/08/16/nodejs.html" />
+<meta property="og:url" content="https://til.couble.eu/web/2022/08/16/nodejs.html" />
+<meta property="og:site_name" content="TIL" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-16T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Node JS" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-08-16T00:00:00-05:00","datePublished":"2022-08-16T00:00:00-05:00","description":"Lecture notes on Node JS","headline":"Node JS","mainEntityOfPage":{"@type":"WebPage","@id":"https://til.couble.eu/web/2022/08/16/nodejs.html"},"url":"https://til.couble.eu/web/2022/08/16/nodejs.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://til.couble.eu/feed.xml" title="TIL" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-09HCYPQMC0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-09HCYPQMC0');
+</script>
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">TIL</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">Yoann Couble</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Node JS</h1><p class="page-description">Lecture notes on Node JS</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-08-16T00:00:00-05:00" itemprop="datePublished">
+        Aug 16, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#web">web</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>These are some unstructured notes on my current understanding of Node.js</p>
+
+<h1 id="what-is-nodejs-">What is Node.js ?</h1>
+<p>Node.js is a Free and opensource Javascript runtime, asynchronous in nature, on a single thread.
+It wraps the V8 engine used in chrome, to compile to machine code.
+The wrapper adds serverside features, such as IO, DB interaction, content serving and loses navigator-specific functionalities such as DOM interactions.</p>
+
+<h1 id="some-notable-differences-between-nodejs-and-its-frontend-counterparts">Some notable differences between Node.js and its frontend counterparts</h1>
+<ul>
+  <li>On the frontend, there is a <code class="language-plaintext highlighter-rouge">window</code> global object, it is called <code class="language-plaintext highlighter-rouge">global</code> in Node.js and differs in the methods and attributes proposed: <code class="language-plaintext highlighter-rouge">setInterval</code>, <code class="language-plaintext highlighter-rouge">setTimeout</code>, <code class="language-plaintext highlighter-rouge">clearInterval</code>, <code class="language-plaintext highlighter-rouge">__dirname</code>, <code class="language-plaintext highlighter-rouge">__filename</code>…</li>
+  <li>Node uses the CommonJS syntax to import modules: <code class="language-plaintext highlighter-rouge">const xyz = require('./path_to_module');</code>
+    <ul>
+      <li>explicit exports are required (<code class="language-plaintext highlighter-rouge">modules.exports = &lt;...&gt;</code> for example, but there are other ways)</li>
+      <li>In Browser JS and since ES6, imports use the <code class="language-plaintext highlighter-rouge">import X from 'package'</code> syntax</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="some-notable-features">Some notable features</h1>
+<ul>
+  <li>Node.js Event Loop
+    <ul>
+      <li>Continuously checks the call stack</li>
+      <li><code class="language-plaintext highlighter-rouge">process.nextTick(() =&gt; {...})</code>: tell the JS engine to run the function code after the current operation is done but before anything else (e.g. at the end of the current tick). Several calls to nextTick are run in order.</li>
+      <li><code class="language-plaintext highlighter-rouge">setTimeout(() =&gt; {}, 0)</code> will run the function at the end of the next tick</li>
+      <li>Queues of the event loop listed by priority:
+        <ul>
+          <li>nextTick queue</li>
+          <li>microtasks queue (promises, <code class="language-plaintext highlighter-rouge">Promise.then()</code>)</li>
+          <li>macrotasks queue (<code class="language-plaintext highlighter-rouge">setTimeout</code>, <code class="language-plaintext highlighter-rouge">setImmediate</code>)</li>
+          <li>More: https://nodejs.dev/en/learn</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Promises:
+    <ul>
+      <li>A solution to <a href="http://callbackhell.com/">Callback Hell</a></li>
+      <li>Runs asynchronously, in Pending state</li>
+      <li>Either end in a Resolved state (triggers then) or a Rejected state (triggers catch)
+        <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">isItDoneYet</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">workDone</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Here is the thing I built</span><span class="dl">'</span><span class="p">;</span>
+    <span class="nx">resolve</span><span class="p">(</span><span class="nx">workDone</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">why</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Still working on something else</span><span class="dl">'</span><span class="p">;</span>
+    <span class="nx">reject</span><span class="p">(</span><span class="nx">why</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>Event Emitter: event management
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">myEvent</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">test-event</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{...})</span>
+  <span class="p">[...]</span>
+  <span class="nx">myEvent</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">"</span><span class="s2">test-event</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">yoann</span><span class="dl">"</span> <span class="p">})</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="notable-mentions">Notable mentions</h1>
+<ul>
+  <li>The package manager is NPM
+    <ul>
+      <li>package.json file: package information (what does it mean to run the package, what are the dependencies…) <code class="language-plaintext highlighter-rouge">npm init</code> creates a base for the package.json file</li>
+      <li>npm install x add the requirement in the package.json file</li>
+    </ul>
+  </li>
+  <li>Express: Goto http framework/router for a node API.</li>
+</ul>
+
+<h1 id="references">References</h1>
+<ul>
+  <li>https://www.youtube.com/watch?v=hKyudh3rC_A</li>
+  <li>https://nodejs.dev/en/learn</li>
+  <li>http://callbackhell.com/</li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/web/2022/08/16/nodejs.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Yoann Couble&#39;s &quot;Today I Learn...&quot; Blog</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://gitlab.com/ycouble" target="_blank" title="ycouble"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#gitlab"></use></svg></a></li><li><a rel="me" href="https://github.com/ycouble" target="_blank" title="ycouble"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/yoann-couble" target="_blank" title="yoann-couble"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
