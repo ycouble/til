@@ -3,12 +3,11 @@ title: Prompt Engineering
 description: Notes on OpenAI Lilian Weng article on Prompt Engineering
 date: March 23, 2023
 categories: [ai]
-layout: link
+layout: post
 toc: false
 comments: true
 hide: false
 search_exclude: false
-source: https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/
 ---
 
 - Prompt Engineering, also known as In-Context Prompting, refers to methods for how to communicate with LLM to steer its behavior for desired outcomes without updating the model weights
@@ -23,3 +22,5 @@ source: https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/
   - Tips for Example Ordering: Keep the selection of examples diverse, relevant to the test sample and in random order to avoid majority label bias and recency bias.
 - Instruction Prompting
   - When interacting with instruction models, we should describe the task requirement in details, trying to be specific and precise and avoiding say “not do something” but rather specify what to do.
+
+source: https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/

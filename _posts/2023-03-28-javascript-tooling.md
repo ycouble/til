@@ -3,12 +3,11 @@ title: Javascript Tooling
 description: Notes on some tooling
 date: March 28, 2023
 categories: [web]
-layout: link
+layout: post
 toc: false
 comments: true
 hide: false
 search_exclude: false
-source: https://www.youtube.com/watch?v=z0cyuYwBImQ
 ---
 
 - Bundler : Resolve all dependencies and package all the application into a single file.
@@ -25,3 +24,5 @@ source: https://www.youtube.com/watch?v=z0cyuYwBImQ
   - ex: eslint
 - Package Manager : Install and manage external modules
   - ex: yarn, npm, pnpm
+
+source: https://www.youtube.com/watch?v=z0cyuYwBImQ
