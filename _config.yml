@@ -38,13 +38,13 @@ baseurl: "" # the subpath of your site, e.g. "/blog".
 
 # Github and twitter are optional:
 minima:
-#   social_links:
-#     # twitter: ycouble
-#     linkedin: yoann-couble
-#     github: ycouble
-#     gitlab:
-#      - username: ycouble
-#        instance: gitlab.com
+  social_links:
+    # twitter: ycouble
+    linkedin: yoann-couble
+    github: ycouble
+    gitlab:
+     - username: ycouble
+       instance: gitlab.com
 
 # Set this to true to get LaTeX math equation support
 use_math: 
