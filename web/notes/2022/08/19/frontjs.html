@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Frontend Frameworks in Javascript | TIL</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Frontend Frameworks in Javascript" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Lecture notes on JS Frameworks and TypeScript" />
+<meta property="og:description" content="Lecture notes on JS Frameworks and TypeScript" />
+<link rel="canonical" href="https://til.couble.eu/web/notes/2022/08/19/frontjs.html" />
+<meta property="og:url" content="https://til.couble.eu/web/notes/2022/08/19/frontjs.html" />
+<meta property="og:site_name" content="TIL" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-19T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Frontend Frameworks in Javascript" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-08-19T00:00:00-05:00","datePublished":"2022-08-19T00:00:00-05:00","description":"Lecture notes on JS Frameworks and TypeScript","headline":"Frontend Frameworks in Javascript","mainEntityOfPage":{"@type":"WebPage","@id":"https://til.couble.eu/web/notes/2022/08/19/frontjs.html"},"url":"https://til.couble.eu/web/notes/2022/08/19/frontjs.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://til.couble.eu/feed.xml" title="TIL" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-09HCYPQMC0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-09HCYPQMC0');
+</script>
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">TIL</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">Yoann Couble</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Frontend Frameworks in Javascript</h1><p class="page-description">Lecture notes on JS Frameworks and TypeScript</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-08-19T00:00:00-05:00" itemprop="datePublished">
+        Aug 19, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#web">web</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#notes">notes</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>These are some unstructured notes on my current understanding of Javascript front end frameworks. This is not a comparison of frameworks nor a benchmark, rather a collection of frameworks and the problem they wanted to solve.</p>
+
+<h1 id="react">React</h1>
+<ul>
+  <li>Problem to solve: updating the state of the application alongside the view, and keeping consistence between both</li>
+  <li>View and state separation: state is updated and a render method specifies how to create the view from the state</li>
+  <li>Uses JSX syntax
+    <ul>
+      <li>Extension of the JS syntax</li>
+      <li>JSX needs to be compiled before reaching a browser</li>
+    </ul>
+  </li>
+  <li>React enables to create components</li>
+  <li>ReactDOM enables to connect components to the browser DOM (compared to React Native for mobile app)</li>
+  <li>Virtual DOM: makes it possible to do partial updates of the real DOM by computing diffs on the virtual DOM</li>
+  <li>React Hooks : since version 16, hooks are a big part of React, and the prime way to interact with component state
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">const [state, setState] = useState(initialState);</code>: creates a state and returns its value plus a function to update the state</li>
+      <li><code class="language-plaintext highlighter-rouge">useEffect(didUpdate, [dep1, dep2, ...]);</code>: plays the function passed as an argument after the first rendering, or after each one of the dependency has changed (after its rendering). The <code class="language-plaintext highlighter-rouge">didUpdate</code> can return a cleaning function, which will be run before running the effect again.</li>
+      <li><code class="language-plaintext highlighter-rouge">const value = useContext(MyContext);</code>: returns the closest context provider context value, initialized by the context given in argument.</li>
+      <li><code class="language-plaintext highlighter-rouge">const [state, dispatch] = useReducer(reducer, initialArg, init);</code>: Same as useState, but makes it possible to use a reducer function to update the state, via the dispatch function returned. <code class="language-plaintext highlighter-rouge">initialArg</code> is set as the initial value of the state. the <code class="language-plaintext highlighter-rouge">init</code> argument is an optional function that will be run if given to lazily initialize the state as <code class="language-plaintext highlighter-rouge">init(initialArg)</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">useCallback</code>: returns a memoized callback function, which will be updated only if one of its dependencies is changed (passed as second argument).
+        <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">memoizedCallback</span> <span class="o">=</span> <span class="nx">useCallback</span><span class="p">(</span>
+  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">doSomething</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="p">[</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">],</span>
+<span class="p">);</span>
+</code></pre></div>        </div>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">const memoizedValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);</code>: returns a memoized value, which will be updated only if dependencies change.</li>
+      <li><code class="language-plaintext highlighter-rouge">const refContainer = useRef(initialValue);</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="typescript">Typescript</h1>
+<ul>
+  <li>Introduces types in Javascript, transpiled into (optimized ?) js</li>
+  <li>It is mostly a dev tool:
+    <ul>
+      <li>Helps type checking &amp; code consistency</li>
+      <li>Helps auto-completion</li>
+      <li>Compilation readiness</li>
+      <li>Integrations with IDEs are really usefull</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="ecmascript">ECMAScript</h1>
+<ul>
+  <li>ECMA Script est le standard du langage JavaScript. Les différentes versions d’ES définissent une interface avec le langage.</li>
+  <li>Les Navigateurs implémentent une version de JavaScript qui leur est propre et implémente donc une edition donnée du standard.</li>
+  <li>ES6 est une version majeure car elle a apporté de nombreuses directives structurantes, comme les promesses, de nombreuses structures, la destructuration.</li>
+  <li>ES7 a introduit les directives async/await</li>
+  <li>Les Navigateurs récents sont très conformes aux éditions d’ES 5, 6 et 7.</li>
+</ul>
+
+<h1 id="references">References</h1>
+<ul>
+  <li>React
+    <ul>
+      <li><a href="https://www.youtube.com/watch?v=SMgQlTSoXf0">Grafikart.fr series on React</a></li>
+      <li><a href="https://fr.reactjs.org/docs/hooks-reference.html">Hook API Reference</a></li>
+    </ul>
+  </li>
+  <li>Typescript
+    <ul>
+      <li><a href="https://podcasts.apple.com/fr/podcast/typescript/id1330329512?i=1000444502550">Typescript with Chris Krycho</a></li>
+      <li><a href="https://podcasts.apple.com/fr/podcast/double-slash/id1513703178?i=1000565607318">FR podcast on typescript</a></li>
+    </ul>
+  </li>
+  <li>Next.js and Vercel
+    <ul>
+      <li><a href="https://podcasts.apple.com/fr/podcast/podrocket-a-web-development-podcast-from-logrocket/id1539945251?i=1000535286428">Vercel and Next.js with Guillermo Rauch</a></li>
+      <li><a href="https://podcasts.apple.com/fr/podcast/programming-throwdown/id427166321?i=1000475448955">React.js and Next.js with Guillermo Rauch on Programming Throwdown</a></li>
+    </ul>
+  </li>
+  <li>ECMAScript:
+    <ul>
+      <li>https://en.wikipedia.org/wiki/ECMAScript</li>
+    </ul>
+  </li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/web/notes/2022/08/19/frontjs.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">TIL</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">TIL</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/ycouble"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">ycouble</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Yoann Couble&#39;s &quot;Today I Learn...&quot; Blog</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

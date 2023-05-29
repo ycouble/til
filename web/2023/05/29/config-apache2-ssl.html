@@ -4,20 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>TIL | Yoann Couble’s “Today I Learn…” Blog</title>
+<title>Apache2 Config with SSL | TIL</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="TIL" />
+<meta property="og:title" content="Apache2 Config with SSL" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Yoann Couble’s “Today I Learn…” Blog" />
-<meta property="og:description" content="Yoann Couble’s “Today I Learn…” Blog" />
-<link rel="canonical" href="https://til.couble.eu/404.html" />
-<meta property="og:url" content="https://til.couble.eu/404.html" />
+<meta name="description" content="Notes deploying a website with apache2 and SSL" />
+<meta property="og:description" content="Notes deploying a website with apache2 and SSL" />
+<link rel="canonical" href="https://til.couble.eu/web/2023/05/29/config-apache2-ssl.html" />
+<meta property="og:url" content="https://til.couble.eu/web/2023/05/29/config-apache2-ssl.html" />
 <meta property="og:site_name" content="TIL" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-05-29T00:00:00-05:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="TIL" />
+<meta property="twitter:title" content="Apache2 Config with SSL" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Yoann Couble’s “Today I Learn…” Blog","headline":"TIL","url":"https://til.couble.eu/404.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-05-29T00:00:00-05:00","datePublished":"2023-05-29T00:00:00-05:00","description":"Notes deploying a website with apache2 and SSL","headline":"Apache2 Config with SSL","mainEntityOfPage":{"@type":"WebPage","@id":"https://til.couble.eu/web/2023/05/29/config-apache2-ssl.html"},"url":"https://til.couble.eu/web/2023/05/29/config-apache2-ssl.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://til.couble.eu/feed.xml" title="TIL" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -84,25 +85,106 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-<div class="container">
-  <h1>404</h1>
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div>
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Apache2 Config with SSL</h1><p class="page-description">Notes deploying a website with apache2 and SSL</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2023-05-29T00:00:00-05:00" itemprop="datePublished">
+        May 29, 2023
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#web">web</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="install-apache2-modules">Install apache2 modules</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># as root</span>
+a2enmod proxy_http
+a2enmod proxy
+a2enmod ssl
+a2enmod md
+</code></pre></div></div>
+
+<h2 id="config-apache2conf">Config apache2.conf</h2>
+
+<pre><code class="language-apacheconf"># in /etc/apache2/apache2.conf
+ServerAdmin ssl-certificate@&lt;your-domain.com&gt;
+MDCertificateAgreement https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf
+</code></pre>
+
+<h2 id="config-site-apache">Config site apache</h2>
+
+<pre><code class="language-apacheconf"># in /etc/apache2/sites-available/your-domain.com.conf
+MDomain &lt;your-domain.com&gt;
+
+&lt;VirtualHost *:443&gt;
+  ServerName &lt;your-domain.com&gt;
+
+  Protocols h2 http/1.1
+  SSLEngine On
+  ProxyRequests Off
+  ProxyVia On
+  ProxyPreserveHost On
+
+  ErrorLog  ${APACHE_LOG_DIR}/&lt;domain&gt;-error.log
+  TransferLog  ${APACHE_LOG_DIR}/&lt;domain&gt;-access.log
+
+  # If necessary
+  ProxyPass /api http://localhost:&lt;exposed_port&gt;/api retry=0
+  ProxyPassReverse /api http://localhost:&lt;exposed_port&gt;/api retry=0
+
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<h2 id="activer-les-sites">Activer les sites</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># as root</span>
+<span class="nb">cd</span> /etc/apache2/sites-available
+a2ensite &lt;domain&gt;.conf
+</code></pre></div></div>
+
+<h2 id="restart">Restart</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># as root</span>
+<span class="nb">sudo </span>apache2ctl configtest <span class="c"># checks if config is ok</span>
+<span class="nb">sudo </span>systemctl restart apache2
+</code></pre></div></div>
+
+<h1 id="logs">Logs</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># as root</span>
+<span class="c"># your domain logs</span>
+<span class="nb">tail</span> <span class="nt">-f</span> /var/log/apache2/&lt;domain&gt;-error.log
+<span class="nb">tail</span> <span class="nt">-f</span> /var/log/apache2/&lt;domain&gt;-access.log
+<span class="c"># apache 2 logs</span>
+<span class="nb">tail</span> <span class="nt">-f</span> /var/log/apache2/error.log
+<span class="nb">tail</span> <span class="nt">-f</span> /var/log/apache2/access.log
+</code></pre></div></div>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="ycouble/til"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/web/2023/05/29/config-apache2-ssl.html" hidden></a>
+</article>
 
       </div>
     </main><footer class="site-footer h-card">
