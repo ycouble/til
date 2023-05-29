@@ -2,7 +2,7 @@
 title: Prompt Engineering
 description: Notes on OpenAI Lilian Weng article on Prompt Engineering
 date: March 23, 2023
-categories: [ai]
+categories: [ai, links]
 layout: post
 toc: false
 comments: true

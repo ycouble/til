@@ -2,7 +2,7 @@
 title: Javascript Tooling
 description: Notes on some tooling
 date: March 28, 2023
-categories: [web]
+categories: [web, links]
 layout: post
 toc: false
 comments: true
